@@ -1,0 +1,208 @@
+<title>إحاطة لقاء سامح</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;700;800&family=Tajawal:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: one reading column, RTL; brand colors used as status chips and section keys on cream / plum */
+:root {
+  --green: #84B14C; --yellow: #F3BF43; --orange: #F07E45; --teal: #45B7A3; --purple: #9B4392; --pink: #EA4B77; --red: #E94647;
+  --bg: #FFF8EC; --fg: #2D0F2A; --muted: #6B5368; --card: #FFFFFF; --line: #EADFD3; --soft: #F7EDDF; --ink: #2D0F2A;
+  --display: 'Baloo Bhaijaan 2', Tahoma, sans-serif; --body: 'Tajawal', Tahoma, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1E0A1C; --fg: #FFF2E2; --muted: #C9B3C5; --card: #2D0F2A; --line: #4A2645; --soft: #250C22; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #1E0A1C; --fg: #FFF2E2; --muted: #C9B3C5; --card: #2D0F2A; --line: #4A2645; --soft: #250C22; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 17px; line-height: 1.75; }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 0 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 40px; }
+.stripe { height: 10px; background: linear-gradient(to left, var(--green) 0 16.6%, var(--yellow) 0 33.3%, var(--orange) 0 50%, var(--red) 0 66.6%, var(--pink) 0 83.3%, var(--teal) 0); }
+header { display: flex; flex-direction: column; gap: 8px; padding-top: 32px; }
+.eyebrow { font-family: var(--display); font-weight: 700; color: var(--purple); letter-spacing: .01em; }
+h1 { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 6vw, 44px); line-height: 1.25; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 800; font-size: clamp(24px, 4.4vw, 30px); line-height: 1.3; margin: 0; text-wrap: balance; }
+h3 { font-size: 20px; font-weight: 800; margin: 0; line-height: 1.4; }
+p { margin: 0; }
+section { display: flex; flex-direction: column; gap: 18px; }
+.lead { color: var(--muted); font-size: 18px; }
+.note { background: var(--card); border: 2px solid var(--line); border-inline-start: 8px solid var(--orange); border-radius: 16px; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; }
+.note.fix { border-inline-start-color: var(--red); }
+.note b { font-weight: 800; }
+ul, ol { margin: 0; padding-inline-start: 22px; display: flex; flex-direction: column; gap: 6px; }
+.tablebox { overflow-x: auto; border: 2px solid var(--line); border-radius: 16px; background: var(--card); }
+table { width: 100%; border-collapse: collapse; min-width: 640px; }
+th { background: var(--ink); color: #FFF8EC; text-align: right; font-weight: 800; padding: 10px 12px; font-size: 15px; white-space: nowrap; }
+td { padding: 12px; border-top: 1px solid var(--line); vertical-align: top; font-size: 15.5px; }
+.chip { display: inline-block; border-radius: 999px; padding: 1px 12px; font-weight: 800; font-size: 14px; color: #2D0F2A; white-space: nowrap; }
+.c-strong { background: var(--green); } .c-tune { background: var(--yellow); } .c-gap { background: var(--red); }
+.flow { display: flex; flex-wrap: wrap; gap: 10px; align-items: stretch; }
+.node { flex: 1 1 120px; min-width: 0; border-radius: 16px; padding: 12px 14px; color: #2D0F2A; display: flex; flex-direction: column; gap: 4px; }
+.node b { font-family: var(--display); font-size: 20px; }
+.node small { font-size: 13.5px; line-height: 1.5; }
+.node .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.tag { background: #2D0F2A; color: #FFF8EC; border-radius: 999px; font-size: 12.5px; font-weight: 800; padding: 0 9px; }
+.sort { flex: 0 0 auto; background: var(--pink); }
+.item { background: var(--card); border: 2px solid var(--line); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+.item-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.num { font-family: var(--display); font-weight: 800; color: #2D0F2A; border-radius: 999px; padding: 0 14px; }
+.label { font-weight: 800; color: var(--purple); font-size: 15px; }
+.opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.opt { border: 2px solid var(--line); border-radius: 14px; padding: 12px; background: var(--soft); display: flex; flex-direction: column; gap: 4px; font-size: 15px; line-height: 1.6; }
+.opt.rec { border-color: var(--teal); }
+.opt b { font-weight: 800; }
+.rec-badge { align-self: flex-start; background: var(--teal); color: #2D0F2A; font-weight: 800; font-size: 12.5px; border-radius: 999px; padding: 0 10px; }
+.ask { border-top: 2px dashed var(--line); padding-top: 12px; }
+.checklist li::marker { color: var(--teal); }
+.verdict { background: var(--ink); color: #FFF8EC; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+.verdict h2 { color: var(--yellow); }
+.schedule { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.wk { background: var(--soft); border: 2px solid var(--line); border-radius: 12px; padding: 8px 10px; font-size: 14px; line-height: 1.5; }
+.wk b { display: block; font-weight: 800; color: var(--purple); }
+@media (max-width: 640px) { .opts { grid-template-columns: 1fr; } .schedule { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sort { flex-basis: 100%; } }
+</style>
+
+<div class="stripe" aria-hidden="true"></div>
+<div class="wrap" dir="rtl">
+
+<header>
+  <p class="eyebrow">خاص فيك — قبل لقاء الأستاذ سامح · الثلاثاء ٣ نوفمبر ٢٠٢٦</p>
+  <h1>وش صار في لقاء ٢٨ أكتوبر، ووش لازم يصير اليوم</h1>
+  <p class="lead">ملخص القرارات مع رأيي الصريح فيها، وبعدها خمسة بنود تطرحها اليوم: لكل بند المقترح وليش، والخيارات، وتوصيتي، والسؤال اللي لازم تطلع بجوابه.</p>
+</header>
+
+<div class="note">
+  <h3>تنبيه عن المصدر</h3>
+  <p>تسجيل <bdi>OBS</bdi> في مجلد «سامح» ما قدرت أفتحه: حجمه ١٫٢٧ جيجا وما له تفريغ نصي في <bdi>Drive</bdi>، وبيئة العمل ما تسمح بتحميله. الملخص تحت مبني على الملفين اللي انبنوا <b>بعد</b> الاجتماع: عرض «لجنة الرسم — عالم لقمان ونرجس» (٣٠ أكتوبر) وتقرير متابعة الرسامات. يعني القرارات مؤكدة لأنها انعكست في الملفين، بس <b>النقاش اللي دار حولها ورأي الحضور فيها ما أقدر أنقله</b>. راجع الجدول بسرعة وصحّح أي شي يخالف اللي صار.</p>
+</div>
+
+<div class="note fix">
+  <h3>ثلاث أشياء صلّحها قبل ما تدخل</h3>
+  <ol>
+    <li><b>اسم الأستاذ:</b> كتبته لي «سامح عرفات»، والعرض اللي قدمتوه للأعضاء مكتوب فيه «سامح عرفة». واحد منهم غلط. في العرض الجديد كتبت «الأستاذ سامح» بدون اسم العائلة عشان ما يطلع الخطأ قدامه.</li>
+    <li><b>الدرس الأول لسامح ناقص:</b> قائمة المراحل في تقرير المتابعة تبدأ من «سامح ٢ — اتجاهات الرأس». وين «سامح ١»؟ اسأله عنه اليوم.</li>
+    <li><b>الدبلومة فاضية:</b> شريحة الدبلومة في عرض الأعضاء الجدد فيها خانة «[موعد بداية الدبلومة ومدّتها]» لسا ما تعبّت. يعني وعدتوا الأعضاء بشي ما له تاريخ.</li>
+  </ol>
+</div>
+
+<section>
+  <h2>١ · قرارات اللقاء السابق ورأيي فيها</h2>
+  <div class="tablebox">
+    <table>
+      <tr><th>القرار</th><th>موقف الاجتماع</th><th>رأيي</th><th>التقييم</th></tr>
+      <tr><td><b>رحلة من ثلاث محطات</b> (تأسيس ← دبلومة ← تخصص) وبينها نقطتا فرز</td><td>اعتُمد وانعرض على الأعضاء</td><td>هيكل صحيح ويطابق طريقة الاستوديوهات: أساس، ثم خط إنتاج، ثم تخصص. المشكلة إن الفرز إلى الحين بدون معيار مكتوب، وهذا أول باب للزعل والانسحاب.</td><td><span class="chip c-tune">يحتاج ضبط</span></td></tr>
+      <tr><td><b>الشهر الأول مع صابرين</b>: مسك القلم، المجسمات، التظليل، المنظور</td><td>اعتُمد وبدأ الأحد ١ نوفمبر</td><td>ترتيب منطقي من الأسهل للأصعب. المنظور من نقطتين في آخر الشهر ثقيل على مبتدئ بس مقبول ما دام الهدف الكم.</td><td><span class="chip c-strong">قوي</span></td></tr>
+      <tr><td><b>الشهر الثاني مع سامح</b>: كارتون من الأشكال والنسب حتى التعابير، ثم الديجيتال</td><td>اعتُمد</td><td>المحتوى ممتاز بس الشهر مزحوم: ٩ دروس + انتقال للديجيتال في نفس الشهر. لو ما انفصل الديجيتال بخطة واضحة بيصير هو اللي ينضغط ويطيح.</td><td><span class="chip c-tune">يحتاج ضبط</span></td></tr>
+      <tr><td><b>الكم قبل الجودة</b> وورقة واجب لكل مقطع</td><td>اعتُمد</td><td>صح للشهر الأول. في الشهر الثاني لا: التعابير والنسب لو ما انصحّحت بدري تترسّخ أخطاؤها. يحتاج تصحيح خفيف من سامح على عيّنات.</td><td><span class="chip c-tune">يحتاج ضبط</span></td></tr>
+      <tr><td><b>الدبلومة مع سامح</b>: تجربة خط إنتاج أنيميشن حقيقي</td><td>اعتُمد كفكرة</td><td>أقوى فكرة في الخطة وأضعفها تنفيذاً: لا موعد ولا مدة ولا مخرَج. والدبلومة هي الجزرة اللي تخلي العضو يصبر على شهرين واجبات.</td><td><span class="chip c-gap">ناقص</span></td></tr>
+      <tr><td><b>خمسة تخصصات</b>: شخصيات، خلفيات، ستوري بورد، تحريك، كتيّبات</td><td>اعتُمد</td><td>الأربعة الأولى جزء من <bdi>pipeline</bdi> الأنيميشن والدبلومة تكشفها. «رسم الكتيّبات» شغل <bdi>illustration</bdi> مطبوع، والدبلومة ما راح تكشفه إلا لو أضفتوا مخرَج مطبوع بسيط.</td><td><span class="chip c-tune">يحتاج ضبط</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>٢ · الخريطة: وين يقع كل بند من بنود اليوم</h2>
+  <p class="lead">الأرقام على الخريطة هي أرقام البنود في القسم الجاي. تُقرأ من اليمين.</p>
+  <div class="flow" role="img" aria-label="الرحلة: التأسيس ثم فرز ١ ثم الدبلومة ثم فرز ٢ ثم التخصص، مع مواقع البنود الخمسة">
+    <div class="node" style="background:var(--teal)"><b>التأسيس</b><small>شهران · نحن هنا</small><div class="tags"><span class="tag">بند ١</span><span class="tag">بند ٤</span><span class="tag">بند ٥</span></div></div>
+    <div class="node sort"><b>فرز ١</b><div class="tags"><span class="tag">بند ٢</span></div></div>
+    <div class="node" style="background:var(--yellow)"><b>الدبلومة</b><small>خط إنتاج</small><div class="tags"><span class="tag">بند ٣</span></div></div>
+    <div class="node sort"><b>فرز ٢</b></div>
+    <div class="node" style="background:var(--green)"><b>التخصص</b><small>خمسة مسارات</small></div>
+  </div>
+</section>
+
+<section>
+  <h2>٣ · بنود اليوم: وش أقترح وليش</h2>
+
+  <article class="item">
+    <div class="item-head"><span class="num" style="background:var(--green)">بند ١</span><h3>منهج الشهر الثاني + مشروع ختامي</h3></div>
+    <p><span class="label">المقترح:</span> تثبيت تسلسل دروس سامح، وإضافة مشروع ختامي: <b>لوحة تعابير لشخصية لقمان أو نرجس</b> بالتعابير الخمسة (<bdi>expression sheet</bdi>).</p>
+    <p><span class="label">ليش:</span> أهم مهارة يحتاجها خط الإنتاج هي الرسم «على الموديل» (<bdi>on-model</bdi>): كل رسام يرسم نفس الشخصية بنفس النسب. لو العضو تدرّب على شخصيات عشوائية بيوصل الدبلومة وهو ما يعرف لقمان. وفوق هذا اللوحة تصير دليل ملموس تعتمد عليه في الفرز الأول بدل الانطباع.</p>
+    <div class="opts">
+      <div class="opt rec"><span class="rec-badge">توصيتي</span><b>أ · لوحة تعابير لشخصيات العالم</b>يربط التدريب بالمشروع، ويختبر النسب والتعابير مع بعض.</div>
+      <div class="opt"><b>ب · شخصية حرة من اختيار العضو</b>أمتع للعضو، بس ما يخدم الإنتاج وصعب تقارن بين الأعمال.</div>
+      <div class="opt"><b>ج · بدون مشروع، أوراق الواجب تكفي</b>أخف على الكل، بس تدخل الفرز بدون دليل واضح.</div>
+    </div>
+    <p class="ask"><span class="label">اسأل سامح:</span> وش محتوى الدرس الأول؟ وهل عندكم <bdi>model sheet</bdi> رسمي للقمان ونرجس؟ لو ما فيه، هذا شرط لازم يتجهز قبل الدبلومة، ولازم تتفقون مين يرسمه.</p>
+  </article>
+
+  <article class="item">
+    <div class="item-head"><span class="num" style="background:var(--pink)">بند ٢</span><h3>معايير نقطة الفرز الأولى</h3></div>
+    <p><span class="label">المقترح:</span> درجة موزونة من تقرير المتابعة: الالتزام بالواجبات ٤٠٪، كمية الرسم ٢٥٪، التطور ٢٠٪، التفاعل ١٥٪، وحدّ انتقال مبدئي ٦٠٪. تُعلن للأعضاء قبل نهاية الشهر الأول.</p>
+    <p><span class="label">ليش:</span> الفريق تطوعي، وأي فرز ما له معيار معلن بينفهم مجاملة أو ظلم. وثلاثة أرباع الوزن على أشياء يتحكم فيها العضو نفسه (التزام، كمية، تفاعل)، وهذا يطابق كلامكم إن المرحلة صفر «اختبار التزام لا موهبة». والتطور ٢٠٪ بس، عشان ما تظلم المبتدئ الحقيقي.</p>
+    <div class="opts">
+      <div class="opt rec"><span class="rec-badge">توصيتي</span><b>أ · درجة موزونة معلنة</b>عادلة وقابلة للدفاع، وكل أرقامها موجودة أصلاً في تقرير المتابعة.</div>
+      <div class="opt"><b>ب · نجاح أو رسوب على الواجبات بس</b>أبسط شي، بس يساوي بين اللي تطور واللي سلّم وهو ما تحرك.</div>
+      <div class="opt"><b>ج · تقدير سامح الشخصي</b>أسرع، بس يحمّله عبء ويفتح باب «ليش فلان وأنا لا».</div>
+    </div>
+    <p class="ask"><span class="label">لا تلتزم اليوم بـ:</span> رقم الـ٦٠٪ نهائياً. اعتمد المعايير والأوزان، وخلّ الحدّ يتثبت بعد ما تشوف أرقام أول أسبوعين.</p>
+  </article>
+
+  <article class="item">
+    <div class="item-head"><span class="num" style="background:var(--yellow)">بند ٣</span><h3>الدبلومة: الموعد والمدة والمخرَج ومين يقود وش</h3></div>
+    <p><span class="label">المقترح:</span> ثمانية أسابيع، مخرَجها مقطع واحد من ١٠ إلى ١٥ ثانية من عالم لقمان ونرجس، يمر على مراحل الإنتاج الست كلها.</p>
+    <p><span class="label">ليش:</span> ١٢ ثانية على ١٢ رسمة بالثانية (<bdi>on twos</bdi>) تعني تقريباً ١٤٠ رسمة. لو توزعت على ١٠ رسامين صارت شغل واقعي، وبنفس الوقت كل مرحلة تكشف تخصص مختلف، فالفرز الثاني يصير على دليل. وأي مقطع أطول من كذا في أول تجربة بيموت في النص.</p>
+    <div class="schedule" aria-label="جدول مقترح لثمانية أسابيع">
+      <div class="wk"><b>أسبوع ١</b>القصة والسيناريو</div>
+      <div class="wk"><b>أسبوع ٢</b>الستوري بورد</div>
+      <div class="wk"><b>أسبوع ٣</b>الأنيماتيك والتوقيت</div>
+      <div class="wk"><b>أسبوع ٤</b>الشخصيات والخلفيات</div>
+      <div class="wk"><b>أسبوع ٥–٦</b>التحريك: المفاتيح ثم الوسطيات</div>
+      <div class="wk"><b>أسبوع ٧</b>التلوين</div>
+      <div class="wk"><b>أسبوع ٨</b>التركيب والصوت والعرض</div>
+      <div class="wk"><b>بعدها</b>الفرز الثاني</div>
+    </div>
+    <div class="opts">
+      <div class="opt"><b>أ · سامح يقود كل المراحل</b>اسم قوي، بس سامح مدرب رسم كارتون مو مخرج <bdi>pipeline</bdi>. حمل كبير عليه، والمراحل التقنية بتضعف.</div>
+      <div class="opt rec"><span class="rec-badge">توصيتي</span><b>ب · قيادة مشتركة</b>سامح على الرسم: الشخصيات والتعابير والمفاتيح. وأنت على الستوري بورد والأنيماتيك والتوقيت والتركيب، وهذا تخصصك كمخرج أنيميشن.</div>
+      <div class="opt"><b>ج · مشروع مفتوح بدون دروس</b>سريع ومرن، بس المبتدئ بيضيع بدون منهج.</div>
+    </div>
+    <p class="ask"><span class="label">اطلع بجواب على:</span> تاريخ البداية، والمدة، ودور سامح في كل مرحلة بالاسم، والبرنامج اللي بتحركون عليه (مجاني: <bdi>Krita</bdi> أو <bdi>OpenToonz</bdi> أو <bdi>Blender Grease Pencil</bdi>). وعبّي خانة الدبلومة في عرض الأعضاء بعد اللقاء مباشرة.</p>
+  </article>
+
+  <article class="item">
+    <div class="item-head"><span class="num" style="background:var(--orange)">بند ٤</span><h3>الانتقال للرسم الرقمي</h3></div>
+    <p><span class="label">المقترح:</span> مسار مزدوج: اللي عنده جهاز يبدأ رقمي من الأسبوع الثالث في الشهر الثاني على برنامج مجاني موحّد، واللي ما عنده يكمل ورق ويصوّر شغله، وما يتأخر عن الفرز بسبب الجهاز.</p>
+    <p><span class="label">ليش:</span> الدبلومة رقمية بالكامل، فما ينفع تأجلون الديجيتال لها (الخيار ج) لأن أول أسبوعين منها بيروحون في تعلّم البرنامج بدل الإنتاج. وفي نفس الوقت ما ينفع تفرضون جهاز على متطوع وتخسرونه بسبب شي ما له علاقة بالموهبة.</p>
+    <div class="opts">
+      <div class="opt"><b>أ · جهاز العضو للكل</b>أبسط، بس يقصي اللي ما يملك جهاز.</div>
+      <div class="opt rec"><span class="rec-badge">توصيتي</span><b>ب · مسار مزدوج</b>ما أحد يتأخر بسبب الجهاز، والرقمي يبدأ قبل الدبلومة.</div>
+      <div class="opt"><b>ج · التأجيل للدبلومة</b>يخفف الشهر الثاني، بس يحرق أول الدبلومة.</div>
+    </div>
+    <p class="ask"><span class="label">اسأل سامح:</span> على أي برنامج يدرّس؟ لو على <bdi>Procreate</bdi> (آيباد ومدفوع) هذي مشكلة. البديل المجاني اللي يشتغل على الجوال والتابلت: <bdi>Ibis Paint X</bdi>، وعلى الكمبيوتر: <bdi>Krita</bdi>. وش أقل جهاز يقبله؟</p>
+  </article>
+
+  <article class="item">
+    <div class="item-head"><span class="num" style="background:var(--teal)">بند ٥</span><h3>المتابعة والتغذية الراجعة</h3></div>
+    <p><span class="label">المقترح:</span> تقرير أسبوعي من المشرفين يوصل ملخصه لسامح، وجلسة تقييم شهرية مباشرة يعلّق فيها على نماذج مختارة قدام الكل، وقناة أسئلة وحدة تنجمع وتنرسل له مرة بالأسبوع.</p>
+    <p><span class="label">ليش:</span> تحمي وقت سامح من رسائل فردية ما تخلص، وتخلي ملاحظة وحدة منه توصل للكل. وجلسة التقييم المباشرة هي التصحيح اللي قلت إن الشهر الثاني يحتاجه.</p>
+    <p class="ask"><span class="label">اسأل سامح:</span> وش الوقت المتاح له بالشهر؟ وهل فيه تكلفة على الجلسات المباشرة؟</p>
+  </article>
+</section>
+
+<section>
+  <h2>٤ · أسئلة لا تطلع بدون جوابها</h2>
+  <ul class="checklist">
+    <li>وش محتوى الدرس الأول له، ومتى يبدأ شهره رسمياً؟</li>
+    <li>دوراته عندنا مسجلة من منصته «كاريكاتيرجي»: الأعضاء يدخلونها بأي صفة؟ ومسموح نعرض المقاطع داخل مجموعتنا؟ لازم يكون الاتفاق واضح، حتى لو شفهي.</li>
+    <li>موعد الدبلومة ومدتها ودوره في كل مرحلة.</li>
+    <li>البرنامج الرقمي اللي يدرّس عليه.</li>
+    <li>هل عندكم <bdi>model sheet</bdi> رسمي لشخصيات لقمان ونرجس؟</li>
+    <li>وقته المتاح، وأي مستحقات مالية لو فيه.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>٥ · لا تلتزم اليوم بـ</h2>
+  <ul>
+    <li><b>توزيع أي عضو على تخصص.</b> ما فيه دليل قبل الدبلومة، وأي وعد الحين بيرجع عليك.</li>
+    <li><b>مكافآت مربوطة بالدبلومة</b> قبل ما تعرف تكلفتها ومين يمولها.</li>
+    <li><b>حدّ الفرز النهائي</b> قبل ما تشوف بيانات أول أسبوعين.</li>
+  </ul>
+</section>
+
+<div class="verdict">
+  <h2>رأيي الصريح</h2>
+  <p>الخطة ككل قوية ومبنية صح. الخطر الحقيقي مو في المنهج، الخطر في شغلتين: <b>التسرّب في المرحلة صفر</b> (شهرين واجبات بدون هدف مرئي)، و<b>الدبلومة اللي ما لها تاريخ</b>. وهالشغلتين مربوطة ببعض: لما يكون للدبلومة تاريخ ومخرَج واضح، يصير عند العضو سبب يكمل عشانه.</p>
+  <p>لو طلعت من اللقاء بشي واحد بس، خلّه: <b>تاريخ بداية الدبلومة، ومدتها، والمقطع اللي بتطلع فيه</b>. وكل البنود الثانية تقدر تخلّصها برسائل بعدين.</p>
+</div>
+
+</div>
