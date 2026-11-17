@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>متابعة إنتاج فريق الإعلام</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#84B14C; --yellow:#F3BF43; --orange:#F07E45; --teal:#45B7A3;
+  --purple:#9B4392; --pink:#EA4B77; --red:#E94647;
+  --green-d:#5f8a2c; --teal-d:#2f8f7d;
+  --ink:#1d2b24; --muted:#617068; --line:#e3e8dc; --bg:#f6f7f2; --card:#fff;
+  --r:16px;
+  --font:"Cairo","Segoe UI",Tahoma,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.6}
+button,input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:1240px;margin:0 auto;padding:0 16px}
+#report{display:none}
+
+/* ---------- top bar ---------- */
+.top{position:sticky;top:0;z-index:30;background:#fff;box-shadow:0 2px 14px rgba(29,43,36,.08)}
+.top::after{content:"";display:block;height:6px;background:linear-gradient(90deg,
+  var(--green) 0 14.28%,var(--yellow) 0 28.56%,var(--orange) 0 42.84%,var(--red) 0 57.12%,
+  var(--pink) 0 71.4%,var(--purple) 0 85.68%,var(--teal) 0 100%)}
+.top-in{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;padding-top:10px;padding-bottom:10px}
+.brand{display:flex;align-items:center;gap:12px;flex:1 1 320px;min-width:0}
+.proj{font-weight:800;font-size:21px;border:0;border-bottom:2px dashed transparent;background:transparent;padding:2px 4px;min-width:0;flex:1;border-radius:6px}
+.proj:hover,.proj:focus{border-bottom-color:var(--green);outline:none;background:#fafbf7}
+.daychip{background:var(--green);color:var(--ink);font-weight:700;border-radius:999px;padding:4px 14px;white-space:nowrap;font-size:14px}
+.daychip.over{background:var(--red)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.datebox{display:flex;align-items:center;gap:8px;background:var(--bg);border-radius:12px;padding:4px 10px;border:1px solid var(--line)}
+.datebox span{font-size:12px;color:var(--muted)}
+.datebox input{border:0;background:transparent;font-weight:600;outline:none}
+.dayname{font-weight:700;line-height:1.2;text-align:center;min-width:92px}
+.dayname small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 14px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:.15s;white-space:nowrap}
+.btn:hover{border-color:var(--green);background:#f7faf1}
+.btn:focus-visible,.chk:focus-visible,.tri:focus-visible,.x:focus-visible,.seg button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.primary:hover{background:#2c4136}
+.btn.danger{color:#b32b2c;border-color:#f3c8c8}
+.btn.danger:hover{background:#fdf0f0;border-color:var(--red)}
+.btn.sm{padding:4px 10px;font-size:13px;border-radius:10px}
+details.menu{position:relative}
+details.menu>summary{list-style:none}
+details.menu>summary::-webkit-details-marker{display:none}
+.menu-list{position:absolute;inset-inline-end:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 34px rgba(29,43,36,.18);min-width:270px;padding:6px;z-index:40}
+.menu-list button{display:block;width:100%;text-align:start;border:0;background:transparent;padding:9px 12px;border-radius:9px;font-weight:600}
+.menu-list button:hover{background:#f1f6e8}
+.menu-list button small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.menu-list hr{border:0;border-top:1px solid var(--line);margin:6px 4px}
+
+/* ---------- sections ---------- */
+main{padding:18px 0 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:18px}
+.sec-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.sec-head h2{margin:0;font-size:19px;font-weight:800;display:flex;align-items:center;gap:10px}
+.sec-head h2::before{content:"";width:10px;height:22px;border-radius:4px;background:var(--green)}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:3px}
+.seg button{border:0;background:transparent;padding:5px 12px;border-radius:9px;font-weight:600;font-size:13px}
+.seg button.on{background:var(--ink);color:#fff}
+.banner{background:#fff8e1;border:1px solid #f1d98a;border-radius:14px;padding:12px 16px;margin-bottom:18px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.banner b{font-weight:800}
+
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;border-top:5px solid var(--k,var(--green))}
+.kpi .l{color:var(--muted);font-size:13px}
+.kpi .v{font-size:28px;font-weight:800;line-height:1.2}
+.kpi .v small{font-size:14px;font-weight:600;color:var(--muted)}
+.kpi .s{font-size:12.5px;color:var(--muted)}
+.up{color:#2f7d1c;font-weight:700}.dn{color:#c0292a;font-weight:700}
+.bar{height:8px;border-radius:99px;background:#edf0e8;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--bc,var(--green));transition:width .3s}
+
+/* podium */
+.podium{display:flex;justify-content:center;align-items:flex-end;gap:14px;direction:ltr;margin:6px 0 4px;border-bottom:6px solid var(--green);padding:0 8px}
+.pod{width:min(230px,31%);text-align:center;direction:rtl}
+.pod-info{padding:6px 4px 10px}
+.pod-info svg{width:54px;height:72px}
+.pod-name{font-weight:800;font-size:17px;line-height:1.3;word-break:break-word}
+.pod-pts{font-size:15px}.pod-pts b{font-size:26px;font-weight:800}
+.pod-sub{font-size:12.5px;color:var(--muted)}
+.pod-base{border-radius:14px 14px 0 0;display:grid;place-items:center;font-weight:800;font-size:38px;color:rgba(29,43,36,.8)}
+.pod-1 .pod-base{height:130px;background:linear-gradient(#F8D774,#F3BF43)}
+.pod-2 .pod-base{height:96px;background:linear-gradient(#E2E8EA,#C5CDD0)}
+.pod-3 .pod-base{height:70px;background:linear-gradient(#EDB583,#D9894B)}
+.mv{font-weight:700;font-size:12px;margin-inline-start:6px}
+.mv.up{color:#2f7d1c}.mv.dn{color:#c0292a}
+.rest-title{font-weight:700;color:var(--muted);font-size:13px;margin:14px 0 8px}
+.rest{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.rest-card{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:#fafbf7}
+.rest-card .rk{width:36px;height:36px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.rest-card .nm{font-weight:700;line-height:1.3}
+.rest-card .pt{font-size:13px;color:var(--muted)}
+.rest-card>div{flex:1;min-width:0}
+.empty{text-align:center;color:var(--muted);padding:26px 10px}
+
+/* department */
+.dept{background:#fff;border:1px solid var(--line);border-radius:var(--r);margin-bottom:22px;overflow:hidden}
+.dept-head{background:var(--green);color:var(--ink);display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 16px}
+.dept-name{flex:1 1 220px;min-width:0;font-weight:800;font-size:21px;background:rgba(255,255,255,.28);border:2px solid transparent;border-radius:10px;padding:2px 10px;color:var(--ink)}
+.dept-name:focus{outline:none;border-color:var(--ink);background:rgba(255,255,255,.55)}
+.dept-name::placeholder{color:rgba(29,43,36,.55)}
+.dept-score{display:flex;align-items:center;gap:12px;font-weight:700}
+.dept-score .big{font-size:24px;font-weight:800;line-height:1}
+.dept-score .bar{width:130px;background:rgba(255,255,255,.45)}
+.dept-score .bar i{background:var(--ink)}
+.iconbtn{width:34px;height:34px;border-radius:10px;border:0;background:rgba(255,255,255,.4);display:grid;place-items:center;font-size:18px;font-weight:800;color:var(--ink);padding:0}
+.iconbtn:hover{background:rgba(255,255,255,.75)}
+.caret{width:0;height:0;border-inline:6px solid transparent;border-top:8px solid var(--ink);transition:.2s}
+.dept.collapsed .caret{transform:rotate(90deg)}
+.dept.collapsed .dept-body{display:none}
+.gbar{background:var(--teal);padding:14px 16px 16px;--c:var(--teal-d);--cink:#fff}
+.gbar-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.gbar-head h3{margin:0;font-size:16px;font-weight:800}
+.chip{background:rgba(255,255,255,.55);border-radius:999px;padding:1px 10px;font-size:12.5px;font-weight:700}
+.gbar .goal{background:rgba(255,255,255,.94)}
+.addrow{display:inline-flex;align-items:center;gap:6px;border:2px dashed rgba(29,43,36,.45);background:transparent;border-radius:12px;padding:6px 14px;font-weight:700;margin-top:8px}
+.addrow:hover{background:rgba(255,255,255,.45);border-style:solid}
+.members{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;padding:16px}
+.member{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.mhead{background:var(--c);color:var(--cink);padding:10px 12px;display:flex;align-items:center;gap:8px}
+.mname{flex:1;min-width:0;font-weight:800;font-size:17px;background:rgba(255,255,255,.25);border:2px solid transparent;border-radius:9px;padding:1px 8px;color:inherit}
+.mname:focus{outline:none;border-color:currentColor;background:rgba(255,255,255,.4)}
+.mname::placeholder,.mrole::placeholder{color:inherit;opacity:.6}
+.mhead .iconbtn{color:inherit;width:30px;height:30px;font-size:16px}
+.mpts{font-weight:800;font-size:13px;background:rgba(255,255,255,.35);border-radius:999px;padding:1px 9px;white-space:nowrap}
+.mrole{border:0;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--c) 10%,#fff);padding:6px 14px;font-size:13px;color:var(--muted);width:100%}
+.mrole:focus{outline:none;background:#fff}
+.mbody{padding:10px 12px 14px;flex:1}
+.mbody .addrow{border-color:color-mix(in srgb,var(--c) 70%,#555);margin-top:6px;font-size:14px}
+.member .bar{margin:2px 12px 12px;--bc:var(--c)}
+.addmember{border:2px dashed var(--line);border-radius:14px;min-height:90px;align-self:start;display:grid;place-items:center;background:#fafbf7;font-weight:700;color:var(--muted)}
+.addmember:hover{border-color:var(--green);color:var(--ink);background:#f4f9ea}
+.goals{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.goal{border-radius:12px;padding:6px 8px;background:color-mix(in srgb,var(--c) 9%,#fff);border:1px solid color-mix(in srgb,var(--c) 22%,#fff)}
+.grow{display:flex;align-items:flex-start;gap:8px}
+.chk{width:26px;height:26px;border-radius:50%;border:2.5px solid var(--c);background:#fff;display:grid;place-items:center;flex:none;padding:0;margin-top:2px}
+.chk svg{width:15px;height:15px;fill:none;stroke:var(--cink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.goal.done .chk{background:var(--c)}
+.goal.done .chk svg{opacity:1}
+.gtitle{flex:1;min-width:0;border:0;background:transparent;resize:none;overflow:hidden;font-weight:600;padding:3px 4px;line-height:1.5;border-radius:6px;height:34px}
+.gtitle:focus{outline:2px solid color-mix(in srgb,var(--c) 70%,#fff);background:#fff}
+.goal.done .gtitle{color:#6b7a72}
+.gpts{font-size:11.5px;font-weight:800;border-radius:999px;padding:1px 8px;background:color-mix(in srgb,var(--c) 18%,#fff);margin-top:4px;white-space:nowrap}
+.goal:not(.done) .gpts{opacity:.55}
+.tri{width:24px;height:26px;border:0;background:transparent;display:grid;place-items:center;flex:none;border-radius:8px;padding:0;margin-top:2px}
+.tri:hover{background:rgba(0,0,0,.06)}
+.tri i{width:0;height:0;border-inline:6px solid transparent;border-top:8px solid var(--ink);transition:transform .2s}
+.goal.open .tri i{transform:rotate(180deg)}
+.x{width:20px;height:26px;border:0;background:transparent;color:#9aa59e;font-size:20px;line-height:1;padding:0;border-radius:8px;margin-top:2px}
+.x:hover{color:var(--red);background:rgba(233,70,71,.1)}
+.gdetail{display:none;padding:2px 36px 4px 2px}
+.goal.open .gdetail{display:block}
+.gdetail textarea{width:100%;font-size:13px;line-height:1.6;border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 10px;resize:vertical;min-height:62px;color:#33423a}
+.gdetail textarea:focus{outline:2px solid var(--teal)}
+.gmeta{font-size:11.5px;color:var(--muted);margin-top:3px}
+
+/* progress */
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;margin:14px 0}
+.chartbox{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fcfdfa}
+.chartbox h4{margin:0 0 6px;font-size:14px;font-weight:700}
+.chartbox svg{width:100%;height:auto;display:block}
+svg text{font-family:var(--font);fill:#617068;font-size:11px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;margin-top:6px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:12.5px;font-weight:700}
+.pill.ok{background:#e4f3d5;color:#2d6a14}.pill.bad{background:#fde1e1;color:#a32324}.pill.mid{background:#fff0c9;color:#7a5600}
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+table.t th{background:var(--ink);color:#fff;padding:8px 10px;text-align:start;font-weight:700}
+table.t th:first-child{border-start-start-radius:10px}table.t th:last-child{border-start-end-radius:10px}
+table.t td{padding:8px 10px;border-bottom:1px solid var(--line)}
+table.t tr.live td{background:#f1f7e6;font-weight:600}
+.tablewrap{overflow-x:auto}
+textarea.note{width:100%;min-height:78px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fcfdfa;resize:vertical}
+textarea.note:focus{outline:2px solid var(--teal)}
+.foot{color:var(--muted);font-size:12.5px;text-align:center;margin-top:10px}
+
+/* dialogs / toast */
+dialog{border:0;border-radius:18px;padding:0;box-shadow:0 24px 80px rgba(0,0,0,.35);max-width:min(480px,92vw);width:100%;color:var(--ink);font-family:var(--font)}
+dialog::backdrop{background:rgba(29,43,36,.5)}
+.dlg{padding:22px}
+.dlg h3{margin:0 0 12px;font-size:19px;font-weight:800}
+.dlg label{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:10px 0;font-weight:600}
+.dlg input,.dlg select{border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:#fff;width:150px}
+.dlg .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+.dlg hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--ink);color:#fff;border-radius:14px;padding:10px 16px;display:flex;gap:14px;align-items:center;opacity:0;pointer-events:none;transition:.25s;z-index:100;max-width:92vw}
+#toast.on{opacity:1;transform:translateX(-50%);pointer-events:auto}
+#toast button{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:9px;padding:2px 12px;font-weight:700}
+
+@media (max-width:640px){
+  .proj{font-size:18px}
+  .tools{width:100%}
+  .btn{padding:7px 10px;font-size:13.5px}
+  .podium{gap:6px}
+  .pod-name{font-size:14px}.pod-pts b{font-size:20px}
+  .dept-score .bar{width:80px}
+}
+
+/* ---------- print / report ---------- */
+@page{size:A4 portrait;margin:10mm}
+@media print{
+  html,body{background:#fff!important}
+  body>*:not(#report){display:none!important}
+  #report{display:block}
+}
+#report,#report *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.rp{font-family:var(--font);color:var(--ink);font-size:11px;line-height:1.55;direction:rtl}
+.rp-head{display:flex;justify-content:space-between;align-items:center;gap:10mm;background:var(--green);border-radius:4mm;padding:5mm 6mm;margin-bottom:4mm}
+.rp-head h1{margin:0;font-size:21px;line-height:1.25}
+.rp-sub{font-size:11px;font-weight:700;background:rgba(255,255,255,.5);display:inline-block;border-radius:99px;padding:0 3mm;margin-bottom:1.5mm}
+.rp-date{text-align:left;display:flex;flex-direction:column;font-size:11px;line-height:1.4}
+.rp-date b{font-size:15px}
+.rp-stripe{height:2mm;border-radius:1mm;margin-bottom:4mm;background:linear-gradient(90deg,var(--green) 0 14.28%,var(--yellow) 0 28.56%,var(--orange) 0 42.84%,var(--red) 0 57.12%,var(--pink) 0 71.4%,var(--purple) 0 85.68%,var(--teal) 0 100%)}
+.rp h2{font-size:14px;margin:5mm 0 2.5mm;display:flex;align-items:center;gap:2mm}
+.rp h2::before{content:"";width:2.4mm;height:5mm;border-radius:1mm;background:var(--green)}
+.rp-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm}
+.rp-kpi{border:.3mm solid #d9dfd1;border-top:1.6mm solid var(--k,var(--green));border-radius:3mm;padding:2.5mm 3mm}
+.rp-kpi .l{color:var(--muted);font-size:10px}.rp-kpi .v{font-size:19px;font-weight:800;line-height:1.2}.rp-kpi .s{font-size:9.5px;color:var(--muted)}
+table.rp-t{width:100%;border-collapse:collapse;font-size:10.5px}
+.rp-t th{background:var(--ink);color:#fff;padding:1.6mm 2mm;text-align:start}
+.rp-t td{padding:1.6mm 2mm;border-bottom:.25mm solid #dfe4d8;vertical-align:top}
+.rp-t td.c,.rp-t th.c{text-align:center;white-space:nowrap}
+.rp-t small{color:var(--muted)}
+.rp-det{font-size:9.2px;color:var(--muted);margin-top:.6mm}
+.rp-ok{display:inline-grid;place-items:center;width:4.6mm;height:4.6mm;border-radius:50%;background:var(--teal-d)}
+.rp-ok svg{width:3.2mm;height:3.2mm;fill:none;stroke:#fff;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.rp-no{display:inline-block;width:4.6mm;height:4.6mm;border-radius:50%;border:.5mm solid #9aa59e}
+.rp-dept{break-before:page}
+.rp-dhead{background:var(--green);border-radius:3mm;padding:3mm 5mm;display:flex;justify-content:space-between;align-items:center;margin-bottom:3mm}
+.rp-dhead b{font-size:17px}
+.rp-gbar{background:var(--teal);border-radius:3mm;padding:2.5mm 3mm 3mm;margin-bottom:4mm}
+.rp-gbar>b{display:block;margin-bottom:1.6mm;font-size:12px}
+.rp-gbar .rp-t td{background:#fff}.rp-gbar .rp-t th{background:var(--teal-d)}
+.rp-member{break-inside:avoid;margin-bottom:4mm;border:.3mm solid #d9dfd1;border-radius:3mm;overflow:hidden}
+.rp-mh{background:var(--c);color:var(--cink);padding:1.8mm 3mm;display:flex;justify-content:space-between;font-weight:800;font-size:12px}
+.rp-mh span{font-weight:600;font-size:10.5px}
+.rp-empty{padding:2mm 3mm;color:var(--muted);font-size:10px}
+.rp-charts{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+.rp-cbox{border:.3mm solid #d9dfd1;border-radius:3mm;padding:2mm}
+.rp-cbox h4{margin:0 0 1mm;font-size:11px}
+.rp-cbox svg{width:100%;height:auto;display:block}
+.rp-note{border:.3mm dashed #aab5a4;border-radius:3mm;padding:3mm;min-height:16mm;white-space:pre-wrap}
+.rp-foot{margin-top:6mm;font-size:9px;color:var(--muted);text-align:center}
+.rp-tag{display:inline-block;border-radius:99px;padding:0 2.2mm;font-size:9.5px;font-weight:700;background:#e4f3d5;color:#2d6a14}
+.rp-tag.bad{background:#fde1e1;color:#a32324}
+</style>
+</head>
+<body>
+
+<div id="app">
+<header class="top">
+  <div class="wrap top-in">
+    <div class="brand">
+      <input id="projName" class="proj" aria-label="اسم المشروع" placeholder="اسم المشروع">
+      <span class="daychip" id="dayChip"></span>
+    </div>
+    <div class="tools">
+      <label class="datebox"><span>التاريخ</span><input type="date" id="dateIn"></label>
+      <div class="dayname" id="dayName"></div>
+      <button class="btn primary" data-act="close-day" title="يحفظ نتائج اليوم في السجل ويبدأ يوماً جديداً">إغلاق اليوم وبدء يوم جديد</button>
+      <details class="menu" id="expMenu">
+        <summary class="btn">تصدير وحفظ &#9662;</summary>
+        <div class="menu-list">
+          <button data-act="export-pdf-full">تقرير شامل (PDF)<small>كل الأقسام والأعضاء والتفاصيل بمقاس A4</small></button>
+          <button data-act="export-pdf-daily">تحديث الإدارة اليومي (PDF)<small>نتائج اليوم ومقارنتها بالأمس بمقاس A4</small></button>
+          <hr>
+          <button data-act="copy-summary">نسخ ملخص نصي<small>جاهز للصق في واتساب</small></button>
+          <button data-act="export-csv-goals">جدول الأهداف (Excel / CSV)</button>
+          <button data-act="export-csv-days">سجل الأيام (Excel / CSV)</button>
+          <hr>
+          <button data-act="export-json">نسخة احتياطية (JSON)</button>
+          <button data-act="import-json">استيراد نسخة احتياطية</button>
+        </div>
+      </details>
+      <button class="btn" data-act="settings">الإعدادات</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="banner"></div>
+
+  <section class="card" id="board"></section>
+  <div class="kpis" id="kpis"></div>
+
+  <div id="depts"></div>
+  <div style="text-align:center;margin:6px 0 26px">
+    <button class="btn primary" data-act="add-dept" style="font-size:16px;padding:11px 26px">+ إضافة قسم جديد</button>
+  </div>
+
+  <section class="card" id="daynote"></section>
+  <section class="card" id="progress"></section>
+  <div class="foot" id="saveState"></div>
+</main>
+</div>
+
+<div id="report" aria-hidden="true"></div>
+
+<dialog id="setDlg"><div class="dlg">
+  <h3>الإعدادات</h3>
+  <label>نقاط كل هدف للموظف <input type="number" id="sMember" min="0"></label>
+  <label>نقاط كل هدف عام للقسم <input type="number" id="sDept" min="0"></label>
+  <label>مدة العمل بالأيام <input type="number" id="sDays" min="1" max="60"></label>
+  <label>ترتيب المتصدرين حسب
+    <select id="sRank"><option value="points">إجمالي النقاط</option><option value="percent">نسبة الإنجاز</option></select></label>
+  <label>عدد منصات التتويج
+    <select id="sPod"><option value="3">3 (ذهبي، فضي، برونزي)</option><option value="2">2 (ذهبي، فضي)</option></select></label>
+  <hr>
+  <div class="acts" style="justify-content:flex-start;margin-top:0">
+    <button class="btn" data-act="load-demo">تحميل بيانات تجريبية</button>
+    <button class="btn danger" data-act="clear-all">ابدأ من الصفر (مسح كل شيء)</button>
+  </div>
+  <div class="acts"><button class="btn primary" data-act="close-settings">تم</button></div>
+</div></dialog>
+
+<dialog id="askDlg"><div class="dlg">
+  <h3 id="askTitle">تأكيد</h3>
+  <p id="askMsg" style="margin:0;line-height:1.8"></p>
+  <div class="acts"><button class="btn" id="askNo">إلغاء</button><button class="btn primary" id="askOk">تأكيد</button></div>
+</div></dialog>
+
+<div id="toast" role="status"></div>
+<input type="file" id="fileIn" accept=".json,application/json" hidden>
+
+<script>
+"use strict";
+/* =========================================================
+   متابعة إنتاج فريق الإعلام — ملف HTML مستقل (يعمل بدون إنترنت)
+   البيانات تُحفظ تلقائياً في المتصفح (localStorage) + نسخة JSON احتياطية.
+   ========================================================= */
+const KEY = "mediaTeamTracker.v1";
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const DAYS_AR = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+const MC = [ // ألوان بطاقات الموظفين من لوحة الهوية
+  {c:"#F3BF43", ink:"#1d2b24"}, {c:"#F07E45", ink:"#1d2b24"}, {c:"#E94647", ink:"#1d2b24"},
+  {c:"#9B4392", ink:"#ffffff"}, {c:"#EA4B77", ink:"#1d2b24"}
+];
+const CH = ["#45B7A3","#F07E45","#9B4392","#F3BF43","#E94647","#84B14C","#EA4B77"]; // ألوان الرسوم البيانية
+const MEDALS = [
+  {fill:"#F3BF43", stroke:"#B88A1C", name:"ذهبية"},
+  {fill:"#C5CDD0", stroke:"#818C91", name:"فضية"},
+  {fill:"#D9894B", stroke:"#9C5B25", name:"برونزية"}
+];
+
+const uid = () => "i" + Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-3);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const f = n => { n = Math.round(n * 10) / 10; return String(n); };
+const f0 = n => String(Math.round(n));
+const sgn = n => "\u200E" + (n > 0 ? "+" : n < 0 ? "−" : "") + f(Math.abs(n));
+const pc = n => "\u200E" + f0(n) + "%";
+
+/* ---------- dates ---------- */
+const pad = n => String(n).padStart(2, "0");
+const toISO = d => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+const parseISO = s => { const [y, m, d] = (s || "").split("-").map(Number); return new Date(y || 2000, (m || 1) - 1, d || 1); };
+const todayISO = () => toISO(new Date());
+const addDays = (iso, n) => { const d = parseISO(iso); d.setDate(d.getDate() + n); return toISO(d); };
+const dayNameOf = iso => DAYS_AR[parseISO(iso).getDay()];
+function greg(iso){ try{ return new Intl.DateTimeFormat("ar-SA-u-ca-gregory-nu-latn",{day:"numeric",month:"long",year:"numeric"}).format(parseISO(iso)); }catch(e){ return iso; } }
+function hijri(iso){ try{ return new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-latn",{day:"numeric",month:"long",year:"numeric"}).format(parseISO(iso)); }catch(e){ return ""; } }
+
+/* ---------- state ---------- */
+let S = loadState();
+let saveOK = true, lastSavedAt = null, undoStack = null, toastTimer = null, focusAfter = null;
+
+function blank(){
+  return { v:1, project:"متابعة إنتاج فريق الإعلام",
+    settings:{ memberPts:100, deptPts:150, totalDays:5, rankBy:"points", podium:3 },
+    day:1, date:todayISO(), note:"", demo:false, depts:[], history:[] };
+}
+function migrate(o){
+  const b = blank();
+  const s = Object.assign(b, o || {});
+  s.settings = Object.assign(b.settings, (o && o.settings) || {});
+  s.depts = Array.isArray(s.depts) ? s.depts : [];
+  s.history = Array.isArray(s.history) ? s.history : [];
+  s.depts.forEach(d => {
+    d.id = d.id || uid(); d.goals = d.goals || []; d.members = d.members || [];
+    d.goals.forEach(g => g.id = g.id || uid());
+    d.members.forEach(m => { m.id = m.id || uid(); m.goals = m.goals || []; m.goals.forEach(g => g.id = g.id || uid()); });
+  });
+  return s;
+}
+function loadState(){
+  try{ const raw = localStorage.getItem(KEY); if(raw) return migrate(JSON.parse(raw)); }catch(e){}
+  return demo();
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); saveOK = true; lastSavedAt = new Date(); }catch(e){ saveOK = false; }
+  renderSaveState();
+}
+function renderSaveState(){
+  $("#saveState").textContent = saveOK
+    ? "الحفظ التلقائي مفعّل في هذا المتصفح" + (lastSavedAt ? " · آخر حفظ " + pad(lastSavedAt.getHours()) + ":" + pad(lastSavedAt.getMinutes()) : "") + " · خذ نسخة JSON احتياطية بشكل دوري"
+    : "تنبيه: الحفظ التلقائي غير متاح في هذا المتصفح، استخدم تصدير النسخة الاحتياطية (JSON) لحفظ بياناتك.";
+}
+
+/* ---------- demo data ---------- */
+function demo(){
+  const t = todayISO();
+  const dates = {1:addDays(t,-2), 2:addDays(t,-1), 3:t};
+  const G = (title, detail, dd) => ({id:uid(), title, detail:detail||"", done:!!dd, doneDay:dd||null, doneDate:dd?dates[dd]:null, open:false});
+  const M = (name, role, goals) => ({id:uid(), name, role, goals});
+  const D = (name, goals, members) => ({id:uid(), name, collapsed:false, goals, members});
+  const s = blank();
+  s.demo = true; s.day = 3; s.date = t;
+  s.note = "تأخر تسليم خامات يوم الأمس بسبب ضغط التصوير الميداني، وتم استدراكه صباح اليوم.";
+  s.depts = [
+    D("لجنة التصوير والإنتاج", [
+      G("تغطية الفعالية بالكامل (صور + فيديو)", "تغطية المراحل من الاستقبال حتى الختام، وتسليم الخامات مرتبة في مجلدات حسب اليوم والنوع.", 2),
+      G("تسليم 15 مقطع ريلز نهائي", "كل مقطع بمدة لا تتجاوز 30 ثانية، مع تصحيح لوني موحد وموسيقى مرخصة.", 0)
+    ],[
+      M("ناصر", "مصور رئيسي", [G("تصوير مقابلات الضيوف","استخدام ملفات Log وإضاءة ثلاثية النقاط.",1), G("تسليم الخامات خلال 24 ساعة","",2), G("تصوير لقطات الدعم (B-roll)","",3)]),
+      M("ريم", "مونتاج", [G("مونتاج ريل الافتتاح","",2), G("مونتاج ريل آراء الحضور","",3), G("تسليم النسخة الأفقية للشاشات","",0)])
+    ]),
+    D("لجنة التصميم", [
+      G("إصدار الهوية البصرية للفعالية", "شعار + ألوان + قوالب منشورات وقصص جاهزة للفريق.", 1),
+      G("تجهيز 10 قوالب منشورات", "", 0)
+    ],[
+      M("لمى", "مصممة", [G("تصميم قالب الإعلان الرئيسي","",1), G("تصميم بوستات الضيوف","",2), G("تصميم غلاف ريلز موحد","",3)]),
+      M("فيصل", "موشن جرافيك", [G("إنترو متحرك 5 ثوان","",2), G("أنيميشن الشعار","",0)])
+    ]),
+    D("لجنة التسويق الرقمي", [
+      G("جدولة محتوى 5 أيام كاملة", "نشر يومي على المنصات الثلاث بأوقات ذروة التفاعل.", 3),
+      G("الوصول إلى 50 ألف مشاهدة", "", 0)
+    ],[
+      M("سلمان", "مدير حملات", [G("إعداد خطة الإعلانات الممولة","",1), G("ضبط الاستهداف والجمهور","",2), G("تقرير أداء يومي","",0)]),
+      M("دانة", "إدارة المجتمع", [G("الرد على التعليقات خلال ساعتين","",3), G("رصد التفاعل وتصعيد الملاحظات","",0)])
+    ]),
+    D("لجنة العلاقات والشراكات", [
+      G("تأكيد 3 رعاة إعلاميين", "", 0),
+      G("ملف إعلامي لضيوف الفعالية", "", 0)
+    ],[
+      M("خالد", "علاقات عامة", [G("التواصل مع الجهات الإعلامية","",1), G("إرسال الدعوات الرسمية","",0)]),
+      M("نورة", "منسقة", [G("جدول مواعيد الضيوف","",2), G("تنسيق الاستقبال والمرافقين","",3), G("متابعة التأكيدات","",0)])
+    ])
+  ];
+  s.history = [1, 2].map(k => makeSnap(s, k, dates[k], g => g.done && g.doneDay <= k));
+  return s;
+}
+
+/* ---------- stats ---------- */
+const isDone = g => g.done;
+function memberStats(m, fn = isDone, st = S){
+  const total = m.goals.length, done = m.goals.filter(fn).length;
+  const pts = done * st.settings.memberPts, max = total * st.settings.memberPts;
+  return {id:m.id, name:m.name, total, done, pts, max, pct: max ? pts / max * 100 : 0};
+}
+function deptStats(d, fn = isDone, st = S){
+  const gT = d.goals.length, gD = d.goals.filter(fn).length;
+  const gp = gD * st.settings.deptPts, gmax = gT * st.settings.deptPts;
+  let mp = 0, mmax = 0, mD = 0, mT = 0;
+  d.members.forEach(m => { const x = memberStats(m, fn, st); mp += x.pts; mmax += x.max; mD += x.done; mT += x.total; });
+  const pts = gp + mp, max = gmax + mmax;
+  return {id:d.id, name:d.name, pts, max, gp, gmax, mp, mmax, gD, gT, done:gD + mD, total:gT + mT, pct: max ? pts / max * 100 : 0, members:d.members.length};
+}
+function totals(){
+  const ds = S.depts.map(d => deptStats(d));
+  const pts = ds.reduce((a, x) => a + x.pts, 0), max = ds.reduce((a, x) => a + x.max, 0);
+  const done = ds.reduce((a, x) => a + x.done, 0), total = ds.reduce((a, x) => a + x.total, 0);
+  return {ds, pts, max, done, total, pct: max ? pts / max * 100 : 0};
+}
+function makeSnap(st, day, date, fn){
+  const ds = st.depts.map(d => deptStats(d, fn, st));
+  const members = [];
+  st.depts.forEach(d => d.members.forEach(m => { const x = memberStats(m, fn, st); members.push({id:m.id, name:m.name, dept:d.name, pts:x.pts, done:x.done, total:x.total}); }));
+  const total = ds.reduce((a, x) => a + x.pts, 0), max = ds.reduce((a, x) => a + x.max, 0);
+  return {day, date, total, max, done:ds.reduce((a, x) => a + x.done, 0), goals:ds.reduce((a, x) => a + x.total, 0),
+    depts:ds.map(x => ({id:x.id, name:x.name, pts:x.pts, max:x.max, pct:x.pct, done:x.done, total:x.total})), members, note: day === st.day ? st.note : (st.history.find(h => h.day === day) || {}).note || ""};
+}
+function rankList(list){
+  const key = S.settings.rankBy === "percent" ? "pct" : "pts", other = key === "pct" ? "pts" : "pct";
+  return [...list].sort((a, b) => b[key] - a[key] || b[other] - a[other] || String(a.name).localeCompare(String(b.name), "ar"));
+}
+function lastSnap(){ return S.history[S.history.length - 1] || null; }
+function deptRows(){
+  const ranked = rankList(S.depts.map(d => deptStats(d)));
+  const last = lastSnap(), prevRank = {};
+  if(last) rankList(last.depts).forEach((x, i) => prevRank[x.id] = i + 1);
+  return ranked.map((x, i) => {
+    const p = last ? last.depts.find(z => z.id === x.id) : null;
+    return Object.assign({}, x, {rank:i + 1, prev: prevRank[x.id] || null, gain: x.pts - (p ? p.pts : 0)});
+  });
+}
+function memberRows(){
+  const last = lastSnap(), out = [];
+  S.depts.forEach(d => d.members.forEach(m => {
+    const x = memberStats(m); const p = last ? last.members.find(z => z.id === m.id) : null;
+    out.push(Object.assign({}, x, {dept:d.name, gain: x.pts - (p ? p.pts : 0)}));
+  }));
+  return out;
+}
+function timeline(){
+  const arr = [...S.history, Object.assign(makeSnap(S, S.day, S.date, isDone), {live:true})];
+  let prev = 0; arr.forEach(s => { s.gain = s.total - prev; prev = s.total; });
+  return arr;
+}
+function pace(tl, T){
+  const closed = tl.filter(s => !s.live), liveSnap = tl[tl.length - 1];
+  const gains = closed.map(s => s.gain);
+  const avg = gains.length ? gains.reduce((a, b) => a + b, 0) / gains.length : Math.max(liveSnap.gain, 0);
+  const remaining = Math.max(T.max - T.pts, 0);
+  const daysLeft = Math.max(S.settings.totalDays - S.day + 1, 0);
+  const required = daysLeft > 0 ? remaining / daysLeft : null;
+  const needed = avg > 0 ? Math.ceil(remaining / avg) : null;
+  const yesterday = closed.length ? closed[closed.length - 1].gain : null;
+  let status = "mid";
+  if(remaining === 0) status = "ok";
+  else if(needed !== null && daysLeft > 0) status = needed <= daysLeft ? "ok" : "bad";
+  else if(daysLeft === 0) status = "bad";
+  return {avg, remaining, daysLeft, required, needed, yesterday, today:liveSnap.gain, status};
+}
+
+/* ---------- helpers: lookup ---------- */
+function findDept(id){ return S.depts.find(d => d.id === id); }
+function findMember(id){ for(const d of S.depts){ const m = d.members.find(x => x.id === id); if(m) return {m, d}; } }
+function findGoal(id){
+  for(const d of S.depts){
+    let i = d.goals.findIndex(g => g.id === id);
+    if(i > -1) return {g:d.goals[i], list:d.goals, i, d, m:null};
+    for(const m of d.members){ i = m.goals.findIndex(g => g.id === id); if(i > -1) return {g:m.goals[i], list:m.goals, i, d, m}; }
+  }
+}
+function newGoal(){ return {id:uid(), title:"", detail:"", done:false, doneDay:null, doneDate:null, open:false}; }
+
+/* ---------- render ---------- */
+function render(){
+  renderTop(); renderBanner(); renderBoard(); renderKpis(); renderDepts(); renderNote(); renderProgress(); renderSaveState();
+  autosizeAll();
+  if(focusAfter){ const el = document.querySelector(focusAfter); if(el){ el.focus(); el.scrollIntoView({block:"center", behavior:"smooth"}); } focusAfter = null; }
+}
+function renderLive(){ renderBoard(); renderKpis(); renderProgress(); }
+
+function renderTop(){
+  const p = $("#projName"); if(p.value !== S.project) p.value = S.project;
+  document.title = S.project || "متابعة الفريق";
+  const chip = $("#dayChip"); chip.textContent = "اليوم " + S.day + " من " + S.settings.totalDays;
+  chip.classList.toggle("over", S.day > S.settings.totalDays);
+  const di = $("#dateIn"); if(di.value !== S.date) di.value = S.date;
+  $("#dayName").innerHTML = esc(dayNameOf(S.date)) + "<small>" + esc(hijri(S.date)) + "</small>";
+}
+function renderBanner(){
+  $("#banner").innerHTML = S.demo ? `<div class="banner"><div><b>هذه بيانات تجريبية</b> لتشاهد طريقة عمل النظام. عدّل عليها كما تشاء أو ابدأ بملف فارغ.</div><button class="btn danger sm" data-act="clear-all">ابدأ من الصفر</button></div>` : "";
+}
+function medalSVG(rank){
+  const m = MEDALS[rank - 1];
+  return `<svg viewBox="0 0 48 64" aria-hidden="true"><polygon points="11,0 24,0 31,27 18,27" fill="#E94647"/><polygon points="37,0 24,0 17,27 30,27" fill="#9B4392"/><circle cx="24" cy="42" r="19" fill="${m.fill}" stroke="${m.stroke}" stroke-width="3"/><circle cx="24" cy="42" r="14" fill="none" stroke="${m.stroke}" stroke-width="1.2" opacity=".6"/><text x="24" y="49" text-anchor="middle" font-size="19" font-weight="800" fill="#1d2b24" style="fill:#1d2b24">${rank}</text></svg>`;
+}
+function moveHTML(r){
+  if(!r.prev || r.prev === r.rank) return "";
+  const d = r.prev - r.rank;
+  return `<span class="mv ${d > 0 ? "up" : "dn"}" title="التغير عن ترتيب الأمس">${d > 0 ? "▲" : "▼"} ${Math.abs(d)}</span>`;
+}
+function renderBoard(){
+  const rows = deptRows();
+  const n = Math.min(S.settings.podium, rows.length);
+  let html = `<div class="sec-head"><h2>لوحة المتصدرين</h2>
+    <div class="seg" role="group" aria-label="أساس الترتيب">
+      <button data-act="rankby" data-v="points" class="${S.settings.rankBy === "points" ? "on" : ""}">حسب النقاط</button>
+      <button data-act="rankby" data-v="percent" class="${S.settings.rankBy === "percent" ? "on" : ""}">حسب نسبة الإنجاز</button>
+    </div></div>`;
+  if(!rows.length){ $("#board").innerHTML = html + `<div class="empty">أضف الأقسام لتظهر لوحة المتصدرين هنا.</div>`; return; }
+  const pod = r => `<div class="pod pod-${r.rank}"><div class="pod-info">${medalSVG(r.rank)}
+    <div class="pod-name">${esc(r.name) || "قسم بدون اسم"}</div>
+    <div class="pod-pts"><b>${f(r.pts)}</b> نقطة</div>
+    <div class="pod-sub">${pc(r.pct)} · ${r.done}/${r.total} هدف ${moveHTML(r)}</div></div>
+    <div class="pod-base">${r.rank}</div></div>`;
+  const top = rows.slice(0, n);
+  const order = n === 3 ? [top[1], top[0], top[2]] : n === 2 ? [top[1], top[0]] : [top[0]];
+  html += `<div class="podium">${order.map(pod).join("")}</div>`;
+  const rest = rows.slice(n);
+  if(rest.length){
+    html += `<div class="rest-title">بقية الأقسام</div><div class="rest">${rest.map(r => `<div class="rest-card"><div class="rk">${r.rank}</div><div><div class="nm">${esc(r.name) || "قسم بدون اسم"} ${moveHTML(r)}</div><div class="pt"><b>${f(r.pts)}</b> نقطة · ${pc(r.pct)} · ${r.done}/${r.total} هدف</div><div class="bar" style="margin-top:5px"><i style="width:${r.pct}%"></i></div></div></div>`).join("")}</div>`;
+  }
+  $("#board").innerHTML = html;
+}
+function renderKpis(){
+  const T = totals(), last = lastSnap();
+  const gain = T.pts - (last ? last.total : 0);
+  const tl = timeline(); const prevGain = tl.length > 1 ? tl[tl.length - 2].gain : null;
+  const cmp = prevGain !== null ? `<span class="${gain >= prevGain ? "up" : "dn"}">${gain >= prevGain ? "▲" : "▼"}</span> مقابل ${sgn(prevGain)} أمس` : "أول يوم عمل";
+  $("#kpis").innerHTML = `
+    <div class="kpi" style="--k:var(--green)"><div class="l">إجمالي النقاط</div><div class="v">${f(T.pts)} <small>/ ${f(T.max)}</small></div><div class="s">${S.depts.length} أقسام · ${S.depts.reduce((a,d)=>a+d.members.length,0)} أعضاء</div></div>
+    <div class="kpi" style="--k:var(--teal)"><div class="l">نسبة الإنجاز الكلية</div><div class="v">${f0(T.pct)}<small>%</small></div><div class="bar" style="margin-top:6px;--bc:var(--teal)"><i style="width:${T.pct}%"></i></div></div>
+    <div class="kpi" style="--k:var(--yellow)"><div class="l">الأهداف المنجزة</div><div class="v">${T.done} <small>/ ${T.total}</small></div><div class="s">المتبقي ${T.total - T.done} هدف</div></div>
+    <div class="kpi" style="--k:var(--orange)"><div class="l">المكتسب اليوم (يوم ${S.day})</div><div class="v ${gain < 0 ? "dn" : ""}">${sgn(gain)} <small>نقطة</small></div><div class="s">${cmp}</div></div>`;
+}
+
+/* ----- departments ----- */
+function goalRow(g, pts){
+  return `<li class="goal${g.done ? " done" : ""}${g.open ? " open" : ""}" data-gid="${g.id}">
+    <div class="grow">
+      <button class="chk" data-act="toggle-goal" aria-pressed="${!!g.done}" aria-label="تحديد الهدف كمنجز"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></button>
+      <textarea class="gtitle autosize" rows="1" data-bind="goal.title" placeholder="عنوان الهدف" aria-label="عنوان الهدف">${esc(g.title)}</textarea>
+      <span class="gpts" title="النقاط">${g.done ? "+" : ""}${f(pts)}</span>
+      <button class="tri" data-act="toggle-detail" aria-expanded="${!!g.open}" aria-label="تفصيل الهدف"><i></i></button>
+      <button class="x" data-act="del-goal" aria-label="حذف الهدف">×</button>
+    </div>
+    <div class="gdetail"><textarea class="autosize" data-bind="goal.detail" rows="3" placeholder="اكتب تفصيل الهدف وتوضيحه للعضو...">${esc(g.detail)}</textarea>
+    ${g.done ? `<div class="gmeta">أُنجز في يوم ${g.doneDay} · ${esc(g.doneDate || "")}</div>` : ""}</div>
+  </li>`;
+}
+function renderDepts(){
+  const P = S.settings;
+  if(!S.depts.length){ $("#depts").innerHTML = `<div class="card empty">لا توجد أقسام بعد. اضغط «إضافة قسم جديد» للبدء.</div>`; return; }
+  $("#depts").innerHTML = S.depts.map(d => {
+    const st = deptStats(d);
+    const members = d.members.map((m, i) => {
+      const c = MC[i % MC.length], ms = memberStats(m);
+      return `<article class="member" data-mid="${m.id}" style="--c:${c.c};--cink:${c.ink}">
+        <div class="mhead">
+          <input class="mname" data-bind="member.name" value="${esc(m.name)}" placeholder="اسم الموظف" aria-label="اسم الموظف">
+          <span class="mpts" title="نقاط الموظف">${f(ms.pts)}/${f(ms.max)}</span>
+          <button class="iconbtn" data-act="del-member" aria-label="حذف الموظف">×</button>
+        </div>
+        <input class="mrole" data-bind="member.role" value="${esc(m.role || "")}" placeholder="المسمى أو الدور (اختياري)" aria-label="المسمى">
+        <div class="mbody"><ul class="goals">${m.goals.map(g => goalRow(g, P.memberPts)).join("")}</ul>
+          <button class="addrow" data-act="add-mgoal">+ هدف للموظف <span class="chip" style="background:rgba(0,0,0,.07)">${f(P.memberPts)} نقطة</span></button></div>
+        <div class="bar"><i style="width:${ms.pct}%"></i></div>
+      </article>`;
+    }).join("");
+    return `<section class="dept${d.collapsed ? " collapsed" : ""}" data-did="${d.id}">
+      <div class="dept-head">
+        <button class="iconbtn" data-act="toggle-dept" aria-label="طي أو فتح القسم" aria-expanded="${!d.collapsed}"><span class="caret"></span></button>
+        <input class="dept-name" data-bind="dept.name" value="${esc(d.name)}" placeholder="اسم القسم أو اللجنة" aria-label="اسم القسم">
+        <div class="dept-score"><div><span class="big">${f(st.pts)}</span> <small>/ ${f(st.max)} نقطة</small></div><div class="bar" title="${pc(st.pct)}"><i style="width:${st.pct}%"></i></div></div>
+        <button class="iconbtn" data-act="del-dept" aria-label="حذف القسم">×</button>
+      </div>
+      <div class="dept-body">
+        <div class="gbar">
+          <div class="gbar-head"><h3>الهدف العام للقسم <span class="chip">${f(P.deptPts)} نقطة لكل هدف</span></h3><span class="chip">${st.gD}/${st.gT} منجز</span></div>
+          <ul class="goals">${d.goals.map(g => goalRow(g, P.deptPts)).join("")}</ul>
+          <button class="addrow" data-act="add-dgoal">+ إضافة هدف عام</button>
+        </div>
+        <div class="members">${members}
+          <button class="addmember" data-act="add-member">+ إضافة موظف جديد</button>
+        </div>
+      </div>
+    </section>`;
+  }).join("");
+}
+
+function renderNote(){
+  $("#daynote").innerHTML = `<div class="sec-head"><h2>ملاحظات اليوم ${S.day}</h2><span style="color:var(--muted);font-size:13px">تظهر في تقرير الإدارة اليومي</span></div>
+    <textarea class="note" data-bind="note" placeholder="أبرز ما حدث اليوم، العوائق، قرارات تحتاج اعتماد الإدارة...">${esc(S.note)}</textarea>`;
+}
+
+/* ----- charts ----- */
+function niceStep(x){ const p = Math.pow(10, Math.floor(Math.log10(x || 1))); const n = x / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p; }
+function axisTop(max){ const step = niceStep(Math.max(max, 1) / 4); return {step, top: step * 4}; }
+function lineChart(tl, W = 640, H = 250){
+  const days = Math.max(S.settings.totalDays, tl[tl.length - 1].day);
+  const pl = 44, pr = 16, pt = 14, pb = 30, iw = W - pl - pr, ih = H - pt - pb;
+  const series = S.depts.map((d, i) => ({
+    name:d.name, color:CH[i % CH.length],
+    pts: tl.map(s => { const x = s.depts.find(z => z.id === d.id); return {day:s.day, v:x ? x.pts : 0, live:!!s.live}; })
+  }));
+  let max = 0; series.forEach(s => s.pts.forEach(p => max = Math.max(max, p.v)));
+  const {step, top} = axisTop(max);
+  const X = day => pl + (days === 1 ? iw / 2 : (day - 1) * iw / (days - 1));
+  const Y = v => pt + (1 - v / top) * ih;
+  let g = "";
+  for(let i = 0; i <= 4; i++){ const v = step * i, y = Y(v);
+    g += `<line x1="${pl}" x2="${W - pr}" y1="${y}" y2="${y}" stroke="#e3e8dc" stroke-width="1"/><text x="${pl - 6}" y="${y + 4}" text-anchor="end">${f(v)}</text>`; }
+  for(let k = 1; k <= days; k++) g += `<text x="${X(k)}" y="${H - 9}" text-anchor="middle">يوم ${k}</text>`;
+  series.forEach(s => {
+    const closed = s.pts.filter(p => !p.live), live = s.pts.find(p => p.live);
+    if(closed.length > 1) g += `<polyline fill="none" stroke="${s.color}" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" points="${closed.map(p => X(p.day) + "," + Y(p.v)).join(" ")}"/>`;
+    if(closed.length && live) { const a = closed[closed.length - 1]; g += `<line x1="${X(a.day)}" y1="${Y(a.v)}" x2="${X(live.day)}" y2="${Y(live.v)}" stroke="${s.color}" stroke-width="2.4" stroke-dasharray="5 4"/>`; }
+    closed.forEach(p => g += `<circle cx="${X(p.day)}" cy="${Y(p.v)}" r="4" fill="${s.color}"/>`);
+    if(live) g += `<circle cx="${X(live.day)}" cy="${Y(live.v)}" r="5" fill="#fff" stroke="${s.color}" stroke-width="2.6"/>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" direction="ltr" role="img" aria-label="تراكم النقاط حسب القسم">${g}</svg>`;
+}
+function barChart(tl, W = 640, H = 250){
+  const days = Math.max(S.settings.totalDays, tl[tl.length - 1].day);
+  const pl = 44, pr = 16, pt = 18, pb = 30, iw = W - pl - pr, ih = H - pt - pb;
+  let max = 0; tl.forEach(s => max = Math.max(max, s.gain));
+  const {step, top} = axisTop(max);
+  const slot = iw / days, bw = Math.min(slot * .55, 54);
+  const Y = v => pt + (1 - v / top) * ih;
+  let g = "";
+  for(let i = 0; i <= 4; i++){ const v = step * i, y = Y(v);
+    g += `<line x1="${pl}" x2="${W - pr}" y1="${y}" y2="${y}" stroke="#e3e8dc"/><text x="${pl - 6}" y="${y + 4}" text-anchor="end">${f(v)}</text>`; }
+  for(let k = 1; k <= days; k++){
+    const cx = pl + slot * (k - .5); g += `<text x="${cx}" y="${H - 9}" text-anchor="middle">يوم ${k}</text>`;
+    const s = tl.find(z => z.day === k);
+    if(s){ const v = Math.max(s.gain, 0), y = Y(v), h = Math.max(pt + ih - y, 0);
+      g += `<rect x="${cx - bw / 2}" y="${y}" width="${bw}" height="${h}" rx="6" fill="${s.live ? "#45B7A3" : "#84B14C"}" ${s.live ? 'opacity=".8" stroke="#2f8f7d" stroke-dasharray="4 3" stroke-width="1.5"' : ""}/>
+      <text x="${cx}" y="${y - 5}" text-anchor="middle" style="fill:#1d2b24;font-weight:700">${sgn(s.gain)}</text>`; }
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" direction="ltr" role="img" aria-label="النقاط المكتسبة يومياً">${g}</svg>`;
+}
+function legendHTML(){ return `<div class="legend">${S.depts.map((d, i) => `<span><i style="background:${CH[i % CH.length]}"></i>${esc(d.name) || "قسم"}</span>`).join("")}<span style="color:var(--muted)">الخط المتقطع والدائرة المفرغة = وضع اليوم الحالي</span></div>`; }
+
+function renderProgress(){
+  const T = totals(), tl = timeline(), p = pace(tl, T);
+  const stTxt = {ok:"على المسار", bad:"متأخر عن الخطة", mid:"لا توجد بيانات كافية"}[p.status];
+  const rows = tl.map(s => {
+    const top = rankList(s.depts)[0];
+    return `<tr class="${s.live ? "live" : ""}"><td>يوم ${s.day}${s.live ? " (الحالي)" : ""}</td><td>${esc(dayNameOf(s.date))} · ${esc(s.date)}</td><td>${f(s.total)} / ${f(s.max)}</td><td class="${s.gain < 0 ? "dn" : s.gain > 0 ? "up" : ""}">${sgn(s.gain)}</td><td>${s.done}/${s.goals}</td><td>${top ? esc(top.name) : "—"}</td></tr>`;
+  }).join("");
+  $("#progress").innerHTML = `
+    <div class="sec-head"><h2>تتبّع التقدّم وسرعة الإنجاز</h2>
+      <button class="btn sm" data-act="undo-day" ${S.history.length ? "" : "disabled style='opacity:.45;cursor:not-allowed'"}>تراجع عن آخر إغلاق يوم</button></div>
+    <div class="kpis" style="margin-bottom:0">
+      <div class="kpi" style="--k:var(--green)"><div class="l">متوسط الإنجاز اليومي</div><div class="v">${f(p.avg)} <small>نقطة/يوم</small></div><div class="s">${p.yesterday !== null ? "أمس: " + sgn(p.yesterday) : "يبدأ الحساب بعد إغلاق أول يوم"}</div></div>
+      <div class="kpi" style="--k:var(--orange)"><div class="l">الوتيرة المطلوبة للوصول للهدف</div><div class="v">${p.required === null ? "—" : f(p.required)} <small>نقطة/يوم</small></div><div class="s">المتبقي ${f(p.remaining)} نقطة خلال ${p.daysLeft} يوم</div></div>
+      <div class="kpi" style="--k:var(--teal)"><div class="l">الأيام اللازمة بالوتيرة الحالية</div><div class="v">${p.remaining === 0 ? "0" : p.needed === null ? "—" : p.needed} <small>يوم</small></div><div class="s"><span class="pill ${p.status}">${stTxt}</span></div></div>
+    </div>
+    <div class="charts">
+      <div class="chartbox"><h4>تراكم النقاط حسب القسم</h4>${lineChart(tl)}${legendHTML()}</div>
+      <div class="chartbox"><h4>النقاط المكتسبة في كل يوم (سرعة الإنجاز)</h4>${barChart(tl)}</div>
+    </div>
+    <div class="tablewrap"><table class="t"><thead><tr><th>اليوم</th><th>التاريخ</th><th>إجمالي النقاط</th><th>المكتسب</th><th>أهداف منجزة</th><th>المتصدر</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+/* ---------- actions ---------- */
+function pushUndo(label){ undoStack = JSON.stringify(S); toast(label, true); }
+function toast(msg, withUndo){
+  const t = $("#toast"); t.innerHTML = "<span></span>" + (withUndo ? '<button data-act="undo">تراجع</button>' : "");
+  t.firstChild.textContent = msg; t.classList.add("on");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("on"), withUndo ? 7000 : 3000);
+}
+function ask(msg, okLabel = "تأكيد", title = "تأكيد"){
+  return new Promise(res => {
+    const dlg = $("#askDlg"); $("#askMsg").textContent = msg; $("#askTitle").textContent = title; $("#askOk").textContent = okLabel;
+    let done = false; const fin = v => { if(!done){ done = true; res(v); } };
+    $("#askOk").onclick = () => { fin(true); dlg.close(); };
+    $("#askNo").onclick = () => { fin(false); dlg.close(); };
+    dlg.onclose = () => fin(false);
+    dlg.showModal();
+  });
+}
+function closestId(el, attr){ const n = el.closest("[" + attr + "]"); return n ? n.getAttribute(attr) : null; }
+
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-act]"); if(!b) return;
+  const act = b.dataset.act;
+  if(!b.closest("#expMenu") ) {} else { $("#expMenu").open = false; }
+  const gid = closestId(b, "data-gid"), mid = closestId(b, "data-mid"), did = closestId(b, "data-did");
+  switch(act){
+    case "add-dept": {
+      const d = {id:uid(), name:"", collapsed:false, goals:[], members:[]}; S.depts.push(d);
+      focusAfter = `[data-did="${d.id}"] .dept-name`; save(); render(); break; }
+    case "del-dept": {
+      const d = findDept(did); if(!d) break;
+      if(!await ask(`حذف القسم «${d.name || "بدون اسم"}» مع كل أعضائه وأهدافه؟`, "حذف القسم", "حذف قسم")) break;
+      pushUndo("تم حذف القسم"); S.depts = S.depts.filter(x => x.id !== did); save(); render(); break; }
+    case "toggle-dept": { const d = findDept(did); d.collapsed = !d.collapsed; save(); renderDepts(); autosizeAll(); break; }
+    case "add-dgoal": { const d = findDept(did), g = newGoal(); g.open = false; d.goals.push(g); focusAfter = `[data-gid="${g.id}"] .gtitle`; save(); render(); break; }
+    case "add-member": { const d = findDept(did), m = {id:uid(), name:"", role:"", goals:[newGoal()]}; d.members.push(m); focusAfter = `[data-mid="${m.id}"] .mname`; save(); render(); break; }
+    case "del-member": {
+      const r = findMember(mid); if(!r) break;
+      if(!await ask(`حذف الموظف «${r.m.name || "بدون اسم"}» وكل أهدافه؟`, "حذف الموظف", "حذف موظف")) break;
+      pushUndo("تم حذف الموظف"); r.d.members = r.d.members.filter(x => x.id !== mid); save(); render(); break; }
+    case "add-mgoal": { const r = findMember(mid), g = newGoal(); r.m.goals.push(g); focusAfter = `[data-gid="${g.id}"] .gtitle`; save(); render(); break; }
+    case "toggle-goal": {
+      const r = findGoal(gid); r.g.done = !r.g.done; r.g.doneDay = r.g.done ? S.day : null; r.g.doneDate = r.g.done ? S.date : null;
+      save(); render(); break; }
+    case "toggle-detail": { const r = findGoal(gid); r.g.open = !r.g.open; save(); const li = b.closest(".goal"); li.classList.toggle("open", r.g.open); b.setAttribute("aria-expanded", r.g.open); autosizeAll(); if(r.g.open) li.querySelector(".gdetail textarea").focus(); break; }
+    case "del-goal": { const r = findGoal(gid); pushUndo("تم حذف الهدف"); r.list.splice(r.i, 1); save(); render(); break; }
+    case "rankby": S.settings.rankBy = b.dataset.v; save(); render(); break;
+    case "close-day": await closeDay(); break;
+    case "undo-day": undoDay(); break;
+    case "undo": if(undoStack){ S = migrate(JSON.parse(undoStack)); undoStack = null; save(); render(); $("#toast").classList.remove("on"); } break;
+    case "settings": openSettings(); break;
+    case "close-settings": $("#setDlg").close(); break;
+    case "load-demo": if(await ask("سيتم استبدال كل البيانات الحالية ببيانات تجريبية.", "استبدال", "تحميل بيانات تجريبية")){ S = demo(); save(); $("#setDlg").close(); render(); } break;
+    case "clear-all": if(await ask("سيتم مسح كل الأقسام والأعضاء والأهداف وسجل الأيام والبدء من الصفر. يُنصح بأخذ نسخة JSON احتياطية قبل ذلك.", "مسح والبدء من الصفر", "ابدأ من الصفر")){
+        const keep = S.settings, proj = S.project; S = blank(); S.settings = keep; S.project = proj; save(); if($("#setDlg").open) $("#setDlg").close(); render(); } break;
+    case "export-pdf-full": printReport("full"); break;
+    case "export-pdf-daily": printReport("daily"); break;
+    case "copy-summary": copySummary(); break;
+    case "export-csv-goals": exportCSVGoals(); break;
+    case "export-csv-days": exportCSVDays(); break;
+    case "export-json": download(`media-tracker-${S.date}.json`, JSON.stringify(S, null, 2), "application/json"); toast("تم تنزيل النسخة الاحتياطية"); break;
+    case "import-json": $("#fileIn").click(); break;
+  }
+});
+document.addEventListener("click", e => { const m = $("#expMenu"); if(m.open && !m.contains(e.target)) m.open = false; });
+
+document.addEventListener("input", e => {
+  const el = e.target;
+  if(el.id === "projName"){ S.project = el.value; document.title = S.project || "متابعة الفريق"; save(); return; }
+  if(el.id === "dateIn"){ if(el.value){ S.date = el.value; save(); renderTop(); renderProgress(); } return; }
+  if(el.id === "sMember"){ S.settings.memberPts = Math.max(0, +el.value || 0); save(); render(); return; }
+  if(el.id === "sDept"){ S.settings.deptPts = Math.max(0, +el.value || 0); save(); render(); return; }
+  if(el.id === "sDays"){ S.settings.totalDays = Math.min(60, Math.max(1, Math.round(+el.value) || 1)); save(); render(); return; }
+  const bind = el.dataset && el.dataset.bind; if(!bind) return;
+  if(bind === "goal.title" || bind === "goal.detail"){ const r = findGoal(closestId(el, "data-gid")); if(r){ r.g[bind.split(".")[1]] = el.value; save(); } autosize(el); }
+  else if(bind === "member.name" || bind === "member.role"){ const r = findMember(closestId(el, "data-mid")); if(r){ r.m[bind.split(".")[1]] = el.value; save(); } }
+  else if(bind === "dept.name"){ const d = findDept(closestId(el, "data-did")); if(d){ d.name = el.value; save(); renderLive(); } }
+  else if(bind === "note"){ S.note = el.value; save(); }
+});
+document.addEventListener("change", e => {
+  if(e.target.id === "sRank"){ S.settings.rankBy = e.target.value; save(); render(); }
+  if(e.target.id === "sPod"){ S.settings.podium = +e.target.value; save(); render(); }
+  if(e.target.id === "fileIn") importJSON(e.target);
+});
+document.addEventListener("keydown", e => {
+  if(e.key === "Enter" && e.target.matches("textarea.gtitle, input.dept-name, input.mname, input.mrole, #projName")){ e.preventDefault(); e.target.blur(); }
+});
+
+function autosize(el){ el.style.height = "auto"; if(el.scrollHeight > 0) el.style.height = el.scrollHeight + 2 + "px"; else el.style.height = ""; }
+function autosizeAll(){ $$("textarea.autosize").forEach(autosize); }
+
+function openSettings(){
+  $("#sMember").value = S.settings.memberPts; $("#sDept").value = S.settings.deptPts; $("#sDays").value = S.settings.totalDays;
+  $("#sRank").value = S.settings.rankBy; $("#sPod").value = String(S.settings.podium);
+  $("#setDlg").showModal();
+}
+
+async function closeDay(){
+  const nxt = addDays(S.date, 1), real = todayISO(), next = nxt > real ? nxt : real;
+  if(!await ask(`سيتم حفظ نتائج يوم ${S.day} (${S.date}) في السجل كمنجز، وبدء يوم ${S.day + 1}. الأهداف المنجزة تبقى كما هي، ويُصفَّر عدّاد «المكتسب اليوم» والملاحظات.`, "إغلاق اليوم", "إغلاق يوم " + S.day)) return;
+  pushUndo("تم إغلاق اليوم وبدء يوم جديد");
+  S.history.push(makeSnap(S, S.day, S.date, isDone));
+  S.day += 1; S.date = next; S.note = "";
+  save(); render(); window.scrollTo({top:0, behavior:"smooth"});
+}
+function undoDay(){
+  const s = S.history.pop(); if(!s) return;
+  S.day = s.day; S.date = s.date; S.note = s.note || "";
+  S.depts.forEach(d => { d.goals.forEach(fixDay); d.members.forEach(m => m.goals.forEach(fixDay)); });
+  function fixDay(g){ if(g.done && g.doneDay > S.day){ g.doneDay = S.day; g.doneDate = S.date; } }
+  save(); render(); toast("تم التراجع إلى يوم " + S.day);
+}
+
+/* ---------- export: files ---------- */
+function download(name, content, mime){
+  const blob = new Blob([content], {type: mime + ";charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+const csvCell = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+function toCSV(rows){ return "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n"); }
+function exportCSVGoals(){
+  const P = S.settings, rows = [["القسم","النوع","الموظف","الهدف","التفاصيل","الحالة","النقاط المحتسبة","النقاط الكاملة","يوم الإنجاز","تاريخ الإنجاز"]];
+  S.depts.forEach(d => {
+    d.goals.forEach(g => rows.push([d.name,"هدف عام للقسم","",g.title,g.detail,g.done ? "منجز" : "غير منجز",g.done ? P.deptPts : 0,P.deptPts,g.doneDay ?? "",g.doneDate ?? ""]));
+    d.members.forEach(m => m.goals.forEach(g => rows.push([d.name,"هدف موظف",m.name,g.title,g.detail,g.done ? "منجز" : "غير منجز",g.done ? P.memberPts : 0,P.memberPts,g.doneDay ?? "",g.doneDate ?? ""])));
+  });
+  download(`goals-${S.date}.csv`, toCSV(rows), "text/csv"); toast("تم تنزيل جدول الأهداف");
+}
+function exportCSVDays(){
+  const rows = [["اليوم","التاريخ","القسم","النقاط","النسبة %","أهداف منجزة","إجمالي الأهداف","المكتسب في اليوم","الحالة"]];
+  const tl = timeline();
+  tl.forEach((s, i) => s.depts.forEach(d => {
+    const p = i ? tl[i - 1].depts.find(z => z.id === d.id) : null;
+    rows.push([s.day, s.date, d.name, d.pts, f0(d.pct), d.done, d.total, d.pts - (p ? p.pts : 0), s.live ? "اليوم الحالي (غير مغلق)" : "مغلق"]);
+  }));
+  download(`days-${S.date}.csv`, toCSV(rows), "text/csv"); toast("تم تنزيل سجل الأيام");
+}
+function importJSON(input){
+  const file = input.files[0]; if(!file) return;
+  const rd = new FileReader();
+  rd.onload = async () => {
+    try{
+      const o = JSON.parse(rd.result); if(!o || !Array.isArray(o.depts)) throw 0;
+      if(!await ask("سيتم استبدال البيانات الحالية بمحتوى الملف.", "استيراد", "استيراد نسخة احتياطية")){ input.value = ""; return; }
+      S = migrate(o); save(); render(); toast("تم الاستيراد بنجاح");
+    }catch(e){ toast("الملف غير صالح"); }
+    input.value = "";
+  };
+  rd.readAsText(file);
+}
+
+/* ---------- WhatsApp-style summary ---------- */
+function summaryText(){
+  const T = totals(), rows = deptRows(), tl = timeline(), p = pace(tl, T);
+  let t = `تحديث ${S.project}\n${dayNameOf(S.date)} ${S.date} · اليوم ${S.day} من ${S.settings.totalDays}\n\n`;
+  t += `الإجمالي: ${f(T.pts)} / ${f(T.max)} نقطة (${pc(T.pct)})\nالمكتسب اليوم: ${sgn(tl[tl.length - 1].gain)} نقطة\nالأهداف المنجزة: ${T.done} من ${T.total}\n\nالترتيب:\n`;
+  rows.forEach(r => t += `${r.rank}) ${r.name || "قسم"} — ${f(r.pts)} نقطة (${pc(r.pct)}) ${r.gain ? "[" + sgn(r.gain) + " اليوم]" : ""}\n`);
+  t += `\nالمتبقي: ${f(p.remaining)} نقطة` + (p.needed ? ` · بالوتيرة الحالية نحتاج ${p.needed} يوم` : "") + "\n";
+  if(S.note.trim()) t += `\nملاحظات:\n${S.note.trim()}\n`;
+  return t;
+}
+async function copySummary(){
+  const t = summaryText();
+  try{ await navigator.clipboard.writeText(t); toast("تم نسخ الملخص"); }
+  catch(e){ const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); toast("تم نسخ الملخص"); }catch(_){ toast("تعذر النسخ"); } ta.remove(); }
+}
+
+/* ---------- PDF reports (A4 via print dialog) ---------- */
+const CK = `<span class="rp-ok"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg></span>`;
+function rpHead(kind){
+  return `<div class="rp-head"><div><span class="rp-sub">${esc(kind)}</span><h1>${esc(S.project)}</h1></div>
+    <div class="rp-date"><b>${esc(dayNameOf(S.date))}</b><span>${esc(greg(S.date))}</span><span>${esc(hijri(S.date))}</span><span>اليوم ${S.day} من ${S.settings.totalDays}</span></div></div><div class="rp-stripe"></div>`;
+}
+function rpGoalTable(goals, pts, head){
+  if(!goals.length) return `<div class="rp-empty">لا توجد أهداف مسجلة</div>`;
+  return `<table class="rp-t"><thead><tr><th class="c" style="width:9%">الحالة</th><th>${head}</th><th class="c" style="width:12%">النقاط</th><th class="c" style="width:13%">الإنجاز</th></tr></thead><tbody>${goals.map(g => `<tr><td class="c">${g.done ? CK : '<span class="rp-no"></span>'}</td><td><b>${esc(g.title) || "—"}</b>${g.detail ? `<div class="rp-det">${esc(g.detail).replace(/\n/g, "<br>")}</div>` : ""}</td><td class="c">${g.done ? f(pts) : 0}<small> / ${f(pts)}</small></td><td class="c">${g.done ? "يوم " + g.doneDay : "—"}</td></tr>`).join("")}</tbody></table>`;
+}
+function rpKpis(T, tl, p){
+  const gain = tl[tl.length - 1].gain, prev = tl.length > 1 ? tl[tl.length - 2].gain : null;
+  return `<div class="rp-kpis">
+    <div class="rp-kpi" style="--k:var(--green)"><div class="l">إجمالي النقاط</div><div class="v">${f(T.pts)}</div><div class="s">من ${f(T.max)}</div></div>
+    <div class="rp-kpi" style="--k:var(--teal)"><div class="l">نسبة الإنجاز</div><div class="v">${pc(T.pct)}</div><div class="s">${T.done} من ${T.total} هدف</div></div>
+    <div class="rp-kpi" style="--k:var(--orange)"><div class="l">المكتسب اليوم</div><div class="v">${sgn(gain)}</div><div class="s">${prev !== null ? "أمس: " + sgn(prev) : "أول يوم"}</div></div>
+    <div class="rp-kpi" style="--k:var(--yellow)"><div class="l">الوتيرة المطلوبة / الحالية</div><div class="v">${p.required === null ? "—" : f(p.required)}<small style="font-size:11px"> / ${f(p.avg)}</small></div><div class="s">نقطة في اليوم</div></div></div>`;
+}
+function rpBoard(rows, withGain){
+  return `<table class="rp-t"><thead><tr><th class="c" style="width:9%">المركز</th><th>القسم</th><th class="c">الأعضاء</th><th class="c">الأهداف</th><th class="c">النقاط</th><th class="c">النسبة</th>${withGain ? '<th class="c">المكتسب اليوم</th><th class="c">التغير</th>' : ""}</tr></thead><tbody>${rows.map(r => {
+    const mv = r.prev && r.prev !== r.rank ? (r.prev > r.rank ? `<span class="rp-tag">▲ ${r.prev - r.rank}</span>` : `<span class="rp-tag bad">▼ ${r.rank - r.prev}</span>`) : "—";
+    return `<tr><td class="c">${r.rank <= 3 ? `<span style="display:inline-block;width:5mm;height:5mm;border-radius:50%;background:${MEDALS[r.rank - 1].fill};border:.5mm solid ${MEDALS[r.rank - 1].stroke};font-weight:800;line-height:4.2mm">${r.rank}</span>` : r.rank}</td><td><b>${esc(r.name) || "قسم"}</b></td><td class="c">${r.members}</td><td class="c">${r.done}/${r.total}</td><td class="c"><b>${f(r.pts)}</b><small> / ${f(r.max)}</small></td><td class="c">${pc(r.pct)}</td>${withGain ? `<td class="c">${sgn(r.gain)}</td><td class="c">${mv}</td>` : ""}</tr>`;
+  }).join("")}</tbody></table>`;
+}
+function reportFull(){
+  const T = totals(), tl = timeline(), p = pace(tl, T), rows = deptRows(), P = S.settings;
+  let h = `<div class="rp">${rpHead("التقرير الشامل")}${rpKpis(T, tl, p)}<h2>ترتيب الأقسام</h2>${rpBoard(rows, true)}
+    <h2>التقدم عبر الأيام</h2><div class="rp-charts"><div class="rp-cbox"><h4>تراكم النقاط حسب القسم</h4>${lineChart(tl, 520, 270)}${legendHTML()}</div><div class="rp-cbox"><h4>النقاط المكتسبة يومياً</h4>${barChart(tl, 520, 270)}</div></div>
+    ${S.note.trim() ? `<h2>ملاحظات اليوم</h2><div class="rp-note">${esc(S.note)}</div>` : ""}`;
+  rows.forEach(r => {
+    const d = findDept(r.id);
+    h += `<div class="rp-dept"><div class="rp-dhead"><b>${esc(d.name) || "قسم بدون اسم"}</b><span>المركز ${r.rank} · <b>${f(r.pts)}</b> / ${f(r.max)} نقطة · ${pc(r.pct)}</span></div>
+      <div class="rp-gbar"><b>الهدف العام للقسم (${f(P.deptPts)} نقطة لكل هدف)</b>${rpGoalTable(d.goals, P.deptPts, "الهدف وتفصيله")}</div>`;
+    d.members.forEach((m, i) => {
+      const c = MC[i % MC.length], ms = memberStats(m);
+      h += `<div class="rp-member" style="--c:${c.c};--cink:${c.ink}"><div class="rp-mh"><div>${esc(m.name) || "موظف بدون اسم"}${m.role ? ` <span>· ${esc(m.role)}</span>` : ""}</div><span>${f(ms.pts)} / ${f(ms.max)} نقطة · ${ms.done}/${ms.total}</span></div>${rpGoalTable(m.goals, P.memberPts, "الهدف وتفصيله")}</div>`;
+    });
+    if(!d.members.length) h += `<div class="rp-empty">لا يوجد موظفون في هذا القسم</div>`;
+    h += `</div>`;
+  });
+  return h + `<div class="rp-foot">صدر بتاريخ ${esc(greg(S.date))} · ${esc(S.project)}</div></div>`;
+}
+function reportDaily(){
+  const T = totals(), tl = timeline(), p = pace(tl, T), rows = deptRows(), P = S.settings;
+  const done = [], left = [];
+  S.depts.forEach(d => {
+    const dn = [], lf = [];
+    d.goals.forEach(g => (g.done ? (g.doneDay === S.day ? dn : null) : lf)?.push({who:"هدف عام للقسم", g, pts:P.deptPts}));
+    d.members.forEach(m => m.goals.forEach(g => (g.done ? (g.doneDay === S.day ? dn : null) : lf)?.push({who:m.name || "موظف", g, pts:P.memberPts})));
+    done.push({d, list:dn}); left.push({d, list:lf});
+  });
+  const doneTotal = done.reduce((a, x) => a + x.list.length, 0);
+  const mrows = memberRows().filter(m => m.gain !== 0).sort((a, b) => b.gain - a.gain).slice(0, 5);
+  const statusTxt = {ok:"على المسار", bad:"متأخر عن الخطة", mid:"قيد القياس"}[p.status];
+  let h = `<div class="rp">${rpHead("تحديث الإدارة اليومي")}${rpKpis(T, tl, p)}
+    <h2>ترتيب الأقسام ومقارنة اليوم بالأمس</h2>${rpBoard(rows, true)}
+    <h2>سرعة الإنجاز</h2><div class="rp-charts"><div class="rp-cbox"><h4>تراكم النقاط حسب القسم</h4>${lineChart(tl, 520, 250)}${legendHTML()}</div><div class="rp-cbox"><h4>النقاط المكتسبة يومياً</h4>${barChart(tl, 520, 250)}</div></div>
+    <p style="margin:2mm 0 0">الحالة: <b>${statusTxt}</b> · المتبقي <b>${f(p.remaining)}</b> نقطة · بالوتيرة الحالية (${f(p.avg)} نقطة/يوم) ${p.remaining === 0 ? "اكتملت الخطة." : p.needed === null ? "لا يمكن تقدير المدة بعد." : `يلزم <b>${p.needed}</b> يوم، والمتاح <b>${p.daysLeft}</b> يوم.`}</p>
+    <h2>ما أُنجز اليوم (${doneTotal} هدف)</h2>`;
+  if(!doneTotal) h += `<div class="rp-empty">لم يُنجز أي هدف اليوم حتى الآن.</div>`;
+  done.forEach(x => { if(!x.list.length) return;
+    h += `<div class="rp-member" style="--c:var(--green);--cink:#1d2b24"><div class="rp-mh"><div>${esc(x.d.name) || "قسم"}</div><span>${x.list.length} هدف · ${f(x.list.reduce((a, i) => a + i.pts, 0))} نقطة</span></div>
+      <table class="rp-t"><tbody>${x.list.map(i => `<tr><td class="c" style="width:7%">${CK}</td><td><b>${esc(i.g.title) || "—"}</b></td><td style="width:26%">${esc(i.who)}</td><td class="c" style="width:12%">+${f(i.pts)}</td></tr>`).join("")}</tbody></table></div>`; });
+  if(mrows.length){
+    h += `<h2>الأعلى إنجازاً اليوم من الموظفين</h2><table class="rp-t"><thead><tr><th class="c" style="width:8%">#</th><th>الموظف</th><th>القسم</th><th class="c">المكتسب اليوم</th><th class="c">إجمالي نقاطه</th></tr></thead><tbody>${mrows.map((m, i) => `<tr><td class="c">${i + 1}</td><td><b>${esc(m.name) || "—"}</b></td><td>${esc(m.dept)}</td><td class="c">${sgn(m.gain)}</td><td class="c">${f(m.pts)} / ${f(m.max)}</td></tr>`).join("")}</tbody></table>`;
+  }
+  const leftTotal = left.reduce((a, x) => a + x.list.length, 0);
+  h += `<h2>الأهداف المتبقية (${leftTotal})</h2>`;
+  if(!leftTotal) h += `<div class="rp-empty">لا توجد أهداف متبقية.</div>`;
+  left.forEach(x => { if(!x.list.length) return;
+    h += `<div class="rp-member" style="--c:var(--teal);--cink:#1d2b24"><div class="rp-mh"><div>${esc(x.d.name) || "قسم"}</div><span>${x.list.length} هدف متبقٍ</span></div>
+      <table class="rp-t"><tbody>${x.list.map(i => `<tr><td class="c" style="width:7%"><span class="rp-no"></span></td><td>${esc(i.g.title) || "—"}</td><td style="width:26%">${esc(i.who)}</td><td class="c" style="width:12%">${f(i.pts)}</td></tr>`).join("")}</tbody></table></div>`; });
+  h += `<h2>ملاحظات اليوم</h2><div class="rp-note">${S.note.trim() ? esc(S.note) : "—"}</div>`;
+  return h + `<div class="rp-foot">صدر بتاريخ ${esc(greg(S.date))} · ${esc(S.project)}</div></div>`;
+}
+let titleBackup = null;
+function printReport(kind){
+  $("#report").innerHTML = kind === "full" ? reportFull() : reportDaily();
+  titleBackup = document.title;
+  document.title = (kind === "full" ? "تقرير-شامل-" : "تحديث-الإدارة-") + (S.project || "").replace(/\s+/g, "-") + "-يوم" + S.day + "-" + S.date;
+  setTimeout(() => window.print(), 80);
+}
+window.addEventListener("afterprint", () => { if(titleBackup !== null){ document.title = titleBackup; titleBackup = null; } $("#report").innerHTML = ""; });
+
+/* ---------- init ---------- */
+render();
+save();
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(autosizeAll);
+window.addEventListener("resize", autosizeAll);
+</script>
+</body>
+</html>
